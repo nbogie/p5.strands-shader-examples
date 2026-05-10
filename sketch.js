@@ -40,32 +40,60 @@ function randomPos() {
     const r = Math.cbrt(random());
     return p5.Vector.random3D().mult(r * 1000);
 }
+const SIZE_TIERS = {
+    big:    { w: [140, 200], h: [260, 360], d: [140, 200] },
+    medium: { w: [70, 110],  h: [120, 200], d: [70, 110] },
+    small:  { w: [25, 45],   h: [40, 90],   d: [25, 45] },
+};
+
 function createRandomBuilding() {
     const pos = randomPos();
-    const n = floor(random(2, 5)); // 2..4 cubes
     const parts = [];
-    for (let i = 0; i < n; i++) {
-        parts.push(createRandomBuildingPart());
+
+    // 1 big anchor at the building's origin.
+    const big = createRandomBuildingPart("big");
+    parts.push(big);
+
+    // 2 medium parts, scattered across the big's footprint.
+    for (let i = 0; i < 2; i++) {
+        const medium = createRandomBuildingPart("medium", big);
+        parts.push(medium);
+
+        // 2 or 3 small parts clustered on top of each medium.
+        const k = floor(random(2, 4));
+        for (let j = 0; j < k; j++) {
+            parts.push(createRandomBuildingPart("small", medium));
+        }
     }
+
     return createBuilding(pos, parts, pickBiased(palette), random(outlineColors));
 }
 
-function createRandomBuildingPart() {
-    return {
-        pos: snapVec(
-            createVector(
-                random(-40, 40),
-                random(-120, 120),
-                random(-40, 40),
-            ),
-            20,
-        ),
-        dims: {
-            w: random(60, 100),
-            h: random(120, 200),
-            d: random(60, 100),
-        },
+function createRandomBuildingPart(tier, anchor) {
+    const r = SIZE_TIERS[tier];
+    const dims = {
+        w: random(r.w[0], r.w[1]),
+        h: random(r.h[0], r.h[1]),
+        d: random(r.d[0], r.d[1]),
     };
+
+    let pos;
+    if (!anchor) {
+        pos = createVector(0, 0, 0);
+    } else {
+        // Small parts bias upward so they read as "perched on top".
+        // Mediums spread freely within the big's footprint.
+        const yBias = tier === "small" ? -anchor.dims.h / 2 : 0;
+        const offset = createVector(
+            random(-anchor.dims.w / 2, anchor.dims.w / 2),
+            yBias + random(-anchor.dims.h / 4, anchor.dims.h / 4),
+            random(-anchor.dims.d / 2, anchor.dims.d / 2),
+        );
+        const grid = tier === "small" ? 10 : 20;
+        pos = snapVec(p5.Vector.add(anchor.pos, offset), grid);
+    }
+
+    return { pos, dims };
 }
 
 function createBuilding(pos, parts, color, outlineColor) {
