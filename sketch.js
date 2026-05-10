@@ -1,45 +1,153 @@
 let outlineShader;
+let buildings;
+
+const palette = ["#596f7e", "#eae6c7", "#f4cb4c"];
+// const palette = ["#64908a", "#e8caa4", "#cc2a41"];
+
+const outlineColors = [
+    // [1, 1, 1, 1], // white
+    [0x40 / 255, 0x40 / 255, 0x40 / 255, 1], // #404040
+];
 
 function setup() {
-  createCanvas(700, 700, WEBGL);
-  outlineShader = buildMaterialShader(outline);
+    createCanvas(700, 700, WEBGL);
+    noStroke();
+
+    outlineShader = buildMaterialShader(outline);
+
+    buildings = createBuildings();
 }
 
 function draw() {
-  background("pink");
+    background("#e67300");
+    // background("#64908a");
+    rotateX(-PI / 8);
+    lights();
+    orbitControl();
 
-  rotateX(-PI / 8);
-  rotateY(0.1 * TWO_PI * millis() / 1000);
+    updateBuildings();
+    drawBuildings();
+}
 
-  const gl = drawingContext;
-  gl.enable(gl.CULL_FACE);
+function createBuildings() {
+    let arr = [];
+    for (let i = 0; i < 25; i++) {
+        arr.push(createRandomBuilding());
+    }
+    return arr;
+}
+function randomPos() {
+    const r = Math.cbrt(random());
+    return p5.Vector.random3D().mult(r * 1000);
+}
+function createRandomBuilding() {
+    const pos = randomPos();
+    const n = floor(random(2, 5)); // 2..4 cubes
+    const parts = [];
+    for (let i = 0; i < n; i++) {
+        parts.push({
+            pos: snapVec(
+                createVector(
+                    random(-40, 40),
+                    random(-120, 120),
+                    random(-40, 40),
+                ),
+                20,
+            ),
+            dims: {
+                w: random(60, 100),
+                h: random(120, 200),
+                d: random(60, 100),
+            },
+        });
+    }
+    return createBuilding(pos, parts, random(palette), random(outlineColors));
+}
 
-  // Pass 1 — outline: draw an inflated copy, but only its back-faces.
-  // p5's projection flips the y-axis, which reverses triangle winding
-  // in clip space, so we cull BACK here to remove the outside-facing
-  // triangles. The inflated hull then contributes only where it sticks
-  // out past the real silhouette.
-  gl.cullFace(gl.BACK);
-  push();
-  shader(outlineShader);
-  scale(1.1);
-  box(150);
-  pop();
+function createBuilding(pos, parts, color, outlineColor) {
+    const b = {
+        pos,
+        targetPos: pos.copy(),
+        color,
+        outlineColor,
+        rotation: 0,
+        rotationSpeed: (random() < 0.5 ? -1 : 1) * random(0.003, 0.008),
+        parts,
+    };
+    return b;
+}
 
-  // Pass 2 — fill: regular lit render. Cull FRONT (which, thanks to the
-  // y-flip, is the inside-facing triangles). Depth test hides the outline
-  // everywhere the real mesh is closer.
-  gl.cullFace(gl.FRONT);
-  lights();
-  fill('lime')
+function snapVec(v, inc) {
+    return createVector(
+        round(v.x / inc) * inc,
+        round(v.y / inc) * inc,
+        round(v.z / inc) * inc,
+    );
+}
 
-  box(150);
+function pickTarget(b) {
+    b.targetPos = randomPos();
+}
 
-  gl.disable(gl.CULL_FACE);
+function updateBuilding(b) {
+    b.rotation += b.rotationSpeed;
+    b.pos.lerp(b.targetPos, 0.01);
+    if (p5.Vector.dist(b.pos, b.targetPos) < 1 && random() < 0.01) {
+        pickTarget(b);
+    }
+}
+
+function updateBuildings() {
+    for (const b of buildings) updateBuilding(b);
+}
+
+function drawBuilding(b) {
+    const gl = drawingContext;
+    gl.enable(gl.CULL_FACE);
+
+    push();
+    translate(b.pos.x, b.pos.y, b.pos.z);
+    rotateY(b.rotation);
+
+    // Pass 1 — every cube in this building, drawn inflated, outline-only.
+    // push/pop scopes the outline shader to this block.
+    push();
+    shader(outlineShader);
+    outlineShader.setUniform("outlineColor", b.outlineColor);
+    gl.cullFace(gl.BACK);
+    for (const p of b.parts) {
+        push();
+        translate(p.pos.x, p.pos.y, p.pos.z);
+        scale(1.1);
+        box(p.dims.w, p.dims.h, p.dims.d);
+        pop();
+    }
+    pop();
+
+    // Pass 2 — every cube again, normal lit fill on top.
+    // Fills cover any internal outlines between adjacent cubes, so the
+    // outline only survives at the building's exterior silhouette.
+    gl.cullFace(gl.FRONT);
+    fill(b.color);
+    for (const p of b.parts) {
+        push();
+        translate(p.pos.x, p.pos.y, p.pos.z);
+        box(p.dims.w, p.dims.h, p.dims.d);
+        pop();
+    }
+
+    pop();
+    gl.disable(gl.CULL_FACE);
+}
+
+function drawBuildings() {
+    for (const b of buildings) drawBuilding(b);
 }
 
 function outline() {
-  finalColor.begin();
-  finalColor.set([0.2,0.2, 0.2,1]);
-  finalColor.end();
+    const oc = uniformVec4("outlineColor");
+    finalColor.begin();
+    finalColor.set([0.2, 0.2, 0.2, 1]);
+
+    finalColor.end();
 }
