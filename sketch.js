@@ -45,23 +45,27 @@ function createRandomBuilding() {
     const n = floor(random(2, 5)); // 2..4 cubes
     const parts = [];
     for (let i = 0; i < n; i++) {
-        parts.push({
-            pos: snapVec(
-                createVector(
-                    random(-40, 40),
-                    random(-120, 120),
-                    random(-40, 40),
-                ),
-                20,
-            ),
-            dims: {
-                w: random(60, 100),
-                h: random(120, 200),
-                d: random(60, 100),
-            },
-        });
+        parts.push(createRandomBuildingPart());
     }
-    return createBuilding(pos, parts, random(palette), random(outlineColors));
+    return createBuilding(pos, parts, pickBiased(palette), random(outlineColors));
+}
+
+function createRandomBuildingPart() {
+    return {
+        pos: snapVec(
+            createVector(
+                random(-40, 40),
+                random(-120, 120),
+                random(-40, 40),
+            ),
+            20,
+        ),
+        dims: {
+            w: random(60, 100),
+            h: random(120, 200),
+            d: random(60, 100),
+        },
+    };
 }
 
 function createBuilding(pos, parts, color, outlineColor) {
@@ -75,6 +79,18 @@ function createBuilding(pos, parts, color, outlineColor) {
         parts,
     };
     return b;
+}
+
+function pickBiased(arr) {
+  // Half-Gaussian with sigma = arr.length / 2, clamped to last index.
+  // Bias toward index 0; ~5% of picks fall on the clamped tail.
+  const i = min(arr.length - 1, floor(abs(randomGaussian()) * arr.length / 2));
+  return arr[i];
+}
+
+function pickBiased2(arr) {
+  // Product of two uniforms — clusters near 0, monotonic decay.
+  return arr[floor(random() * random() * arr.length)];
 }
 
 function snapVec(v, inc) {
