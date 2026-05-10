@@ -1,7 +1,19 @@
 let outlineShader;
+let nebulaShader;
 let buildings;
 
-const palette = ["#596f7e", "#eae6c7", "#f4cb4c"];
+  // "name": "tsu_arcade",
+
+const palette = [
+  "#d1af84",
+  "#cec8b8",
+  "#f3b551",
+  "#4aad8b",
+  "#e15147",
+  "#544e47",
+  ];
+
+// const palette = ["#596f7e", "#eae6c7", "#f4cb4c"];
 // const palette = ["#64908a", "#e8caa4", "#cc2a41"];
 
 const outlineColors = [
@@ -14,19 +26,35 @@ function setup() {
     noStroke();
 
     outlineShader = buildMaterialShader(outline);
+    nebulaShader = buildMaterialShader(nebula);
+    console.log(nebulaShader.fragSrc())
 
     buildings = createBuildings();
 }
 
 function draw() {
-    background("#e67300");
-    // background("#64908a");
+    background("#0a0518");
     rotateX(-PI / 8);
-    lights();
     orbitControl();
 
+    drawNebula();
+
+    lights();
     updateBuildings();
     drawBuildings();
+}
+
+function drawNebula() {
+    const gl = drawingContext;
+    push();
+    shader(nebulaShader);
+    // Same y-flip trick as the outline pass: cull BACK to keep only the
+    // inside-facing triangles, so we see the inner wall of the sphere.
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK);
+    sphere(3000, 48, 32);
+    gl.disable(gl.CULL_FACE);
+    pop();
 }
 
 function createBuildings() {
@@ -41,7 +69,8 @@ function randomPos() {
     return p5.Vector.random3D().mult(r * 1000);
 }
 const SIZE_TIERS = {
-    big:    { w: [140, 200], h: [260, 360], d: [140, 200] },
+    // Big has wide overlapping ranges so it's not always taller than wide.
+    big:    { w: [140, 240], h: [140, 380], d: [120, 220] },
     medium: { w: [70, 110],  h: [120, 200], d: [70, 110] },
     small:  { w: [25, 45],   h: [40, 90],   d: [25, 45] },
 };
@@ -66,41 +95,43 @@ function createRandomBuilding() {
         }
     }
 
-    return createBuilding(pos, parts, pickBiased(palette), random(outlineColors));
+    return createBuilding(pos, parts, random(outlineColors));
 }
 
 function createRandomBuildingPart(tier, anchor) {
     const r = SIZE_TIERS[tier];
+    // Snap to 10 for legible stepped sizes, then add sub-pixel jitter to
+    // break coplanar faces and avoid z-fighting between parts.
     const dims = {
-        w: random(r.w[0], r.w[1]),
-        h: random(r.h[0], r.h[1]),
-        d: random(r.d[0], r.d[1]),
+        w: snap(random(r.w[0], r.w[1]), 10) + random(-0.3, 0.3),
+        h: snap(random(r.h[0], r.h[1]), 10) + random(-0.3, 0.3),
+        d: snap(random(r.d[0], r.d[1]), 10) + random(-0.3, 0.3),
     };
 
     let pos;
     if (!anchor) {
         pos = createVector(0, 0, 0);
     } else {
-        // Small parts bias upward so they read as "perched on top".
-        // Mediums spread freely within the big's footprint.
+        // Mediums spread further out (0.7) so the silhouette breaks up
+        // and stops looking like a fridge. Smalls stay tighter on top.
+        const spread = tier === "medium" ? 0.7 : 0.5;
         const yBias = tier === "small" ? -anchor.dims.h / 2 : 0;
         const offset = createVector(
-            random(-anchor.dims.w / 2, anchor.dims.w / 2),
+            random(-anchor.dims.w * spread, anchor.dims.w * spread),
             yBias + random(-anchor.dims.h / 4, anchor.dims.h / 4),
-            random(-anchor.dims.d / 2, anchor.dims.d / 2),
+            random(-anchor.dims.d * spread, anchor.dims.d * spread),
         );
         const grid = tier === "small" ? 10 : 20;
         pos = snapVec(p5.Vector.add(anchor.pos, offset), grid);
     }
 
-    return { pos, dims };
+    return { pos, dims, color: pickBiased2(palette) };
 }
 
-function createBuilding(pos, parts, color, outlineColor) {
+function createBuilding(pos, parts, outlineColor) {
     const b = {
         pos,
         targetPos: pos.copy(),
-        color,
         outlineColor,
         rotation: 0,
         rotationSpeed: (random() < 0.5 ? -1 : 1) * random(0.003, 0.008),
@@ -121,12 +152,27 @@ function pickBiased2(arr) {
   return arr[floor(random() * random() * arr.length)];
 }
 
+function pickBiased3(arr, biasNum = 2) {
+  // Generalization of pickBiased2: product of `biasNum` uniforms.
+  // biasNum=1 is uniform; higher integers push more weight onto arr[0].
+  let r = 1;
+  for (let i = 0; i < biasNum; i++) r *= random();
+  return arr[floor(r * arr.length)];
+}
+
+function pickBiased4(arr, biasNum = 2) {
+  // Continuous-bias variant: pow(random(), biasNum). biasNum can be any
+  // positive real (try 1.5 or 0.5). Different distribution shape than
+  // pickBiased3 — sharper spike at 0 for the same biasNum.
+  return arr[floor(pow(random(), biasNum) * arr.length)];
+}
+
+function snap(val, inc) {
+    return round(val / inc) * inc;
+}
+
 function snapVec(v, inc) {
-    return createVector(
-        round(v.x / inc) * inc,
-        round(v.y / inc) * inc,
-        round(v.z / inc) * inc,
-    );
+    return createVector(snap(v.x, inc), snap(v.y, inc), snap(v.z, inc));
 }
 
 function pickTarget(b) {
@@ -172,9 +218,9 @@ function drawBuilding(b) {
     // Fills cover any internal outlines between adjacent cubes, so the
     // outline only survives at the building's exterior silhouette.
     gl.cullFace(gl.FRONT);
-    fill(b.color);
     for (const p of b.parts) {
         push();
+        fill(p.color);
         translate(p.pos.x, p.pos.y, p.pos.z);
         box(p.dims.w, p.dims.h, p.dims.d);
         pop();
@@ -191,7 +237,34 @@ function drawBuildings() {
 function outline() {
     const oc = uniformVec4("outlineColor");
     finalColor.begin();
-    finalColor.set([0.2, 0.2, 0.2, 1]);
+    // Passing oc directly to .set() emits a hook body with no return —
+    // unpacking into an array forces strands to construct a new vec4
+    // and emit `return vec4(...)`, which compiles cleanly.
+    finalColor.set([oc.x, oc.y, oc.z, oc.w]);
+    // finalColor.set(oc);
 
+
+    finalColor.end();
+}
+
+function nebula() {
+    // pixelInputs is the only block where texCoord is reliably accessible
+    // in the JS API; stash it for use inside finalColor.
+    let uv = sharedVec2();
+    pixelInputs.begin();
+    uv = pixelInputs.texCoord;
+    pixelInputs.end();
+
+    finalColor.begin();
+    // Two octaves of noise create wispy swirls; a high-freq layer is
+    // raised to a power so only its bright peaks survive — those become
+    // pinprick "stars".
+    const swirl = noise(uv.x * 5, uv.y * 5);
+    const wisp = noise(uv.x * 14 + 50, uv.y * 14);
+    const stars = pow(noise(uv.x * 180, uv.y * 180), 12) * 8;
+    const r = swirl * 0.35 + wisp * 0.1 + stars;
+    const g = swirl * 0.15 + wisp * 0.05 + stars;
+    const b = swirl * 0.55 + wisp * 0.25 + stars + 0.06;
+    finalColor.set([r, g, b, 1]);
     finalColor.end();
 }
