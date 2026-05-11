@@ -16,7 +16,7 @@
 </head>
 <body>
   <a href="index.html" class="back-to-index">← back to index</a>
-  <aside id="explanation">
+  <aside id="explanation" onclick="toggleExplanation()">
     <h2>Fresnel (rim light)</h2>
     <p>Bright glow at surfaces that face away from the camera — classic stylized rim highlight.</p>
     <p>Simplified approximation: in p5's view space, a surface facing the camera has its normal's z component near 1, and at the silhouette it drops toward 0. So <code>1 - n.z</code> is high at the rim. Raise to a power (here 3) to make the rim crisper, multiply by a colour, add to the base.</p>
@@ -24,5 +24,7 @@
     <p class="hint">Press any key to hide.</p>
   </aside>
   <script src="fresnel.js"></script>
+  <button class="toggle-btn" onclick="toggleExplanation()">toggle explanation</button>
+  <script>function toggleExplanation(){var p=document.getElementById("explanation");p.style.display=p.style.display==="none"?"":"none"}</script>
 </body>
 </html>

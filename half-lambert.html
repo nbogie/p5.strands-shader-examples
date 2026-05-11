@@ -16,7 +16,7 @@
 </head>
 <body>
   <a href="index.html" class="back-to-index">← back to index</a>
-  <aside id="explanation">
+  <aside id="explanation" onclick="toggleExplanation()">
     <h2>Half-Lambert</h2>
     <p>A softer alternative to pure Lambertian diffuse, popularised by Valve. Instead of <code>max(N·L, 0)</code> which kills brightness immediately on back-facing surfaces, use <code>pow(N·L * 0.5 + 0.5, 2)</code>.</p>
     <p>The <code>*0.5 + 0.5</code> remaps <code>[-1, 1]</code> to <code>[0, 1]</code> so the back of the object still gets some light (just not much). The <code>pow(..., 2)</code> restores some falloff contrast.</p>
@@ -24,5 +24,7 @@
     <p class="hint">Press any key to hide.</p>
   </aside>
   <script src="half-lambert.js"></script>
+  <button class="toggle-btn" onclick="toggleExplanation()">toggle explanation</button>
+  <script>function toggleExplanation(){var p=document.getElementById("explanation");p.style.display=p.style.display==="none"?"":"none"}</script>
 </body>
 </html>

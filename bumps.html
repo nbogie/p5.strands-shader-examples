@@ -13,12 +13,14 @@
 </head>
 <body>
   <a href="index.html" class="back-to-index">← back to index</a>
-  <aside id="explanation">
+  <aside id="explanation" onclick="toggleExplanation()">
     <h2>Bumps (procedural normal perturbation)</h2>
     <p>The surfaces look bumpy, but no extra geometry was added. The trick is to <strong>perturb each pixel's normal vector</strong> based on a noise field, then let the default Phong lighting compute the lit colour using the wobbly normals.</p>
     <p>Three noise samples (at slightly offset positions) give independent x/y/z shifts. Add them into <code>pixelInputs.normal</code>, then call <code>normalize()</code> so the new direction is still a unit vector.</p>
     <p>Frequency controls bump density; amplitude controls roughness. Try <code>f = 8</code> for orange-peel, <code>f = 40</code> for fine grit.</p>
   </aside>
   <script src="bumps.js"></script>
+  <button class="toggle-btn" onclick="toggleExplanation()">toggle explanation</button>
+  <script>function toggleExplanation(){var p=document.getElementById("explanation");p.style.display=p.style.display==="none"?"":"none"}</script>
 </body>
 </html>

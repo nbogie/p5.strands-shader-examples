@@ -13,12 +13,14 @@
 </head>
 <body>
   <a href="index.html" class="back-to-index">← back to index</a>
-  <aside id="explanation">
+  <aside id="explanation" onclick="toggleExplanation()">
     <h2>Heat haze (post-process filter)</h2>
     <p>A filter shader — applied after geometry rendering via <code>filter(hazeShader)</code>. Each pixel of the output is sampled from the rendered canvas at a slightly <strong>displaced UV</strong>, with the displacement coming from a noise field that scrolls upward over time.</p>
     <p>The displacement is stronger near the bottom (<code>pow(uv.y, 1.5)</code>) — that's where the hot sand would be — and tapers to nothing near the top. Result: silhouettes wobble as if seen through rising hot air.</p>
     <p>Filter shaders use <code>filterColor.canvasContent</code> (the rendered scene as a texture) and <code>filterColor.texCoord</code> (the screen UV), and produce a new colour with <code>filterColor.set</code>.</p>
   </aside>
   <script src="heat-haze.js"></script>
+  <button class="toggle-btn" onclick="toggleExplanation()">toggle explanation</button>
+  <script>function toggleExplanation(){var p=document.getElementById("explanation");p.style.display=p.style.display==="none"?"":"none"}</script>
 </body>
 </html>

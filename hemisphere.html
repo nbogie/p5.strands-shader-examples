@@ -16,7 +16,7 @@
 </head>
 <body>
   <a href="index.html" class="back-to-index">← back to index</a>
-  <aside id="explanation">
+  <aside id="explanation" onclick="toggleExplanation()">
     <h2>Hemisphere lighting</h2>
     <p>Cheap "global" lighting in one line: mix between a sky colour (above) and a ground colour (below) based on the normal's vertical component.</p>
     <p>Formula: <code>mix(groundColor, skyColor, n.y * 0.5 + 0.5)</code>. In p5's view space, +y points down, so we use <code>-n.y</code> to mean "facing up". Surfaces facing the sky get the sky tint, surfaces facing the ground get the ground tint, and slopes get an interpolated colour.</p>
@@ -24,5 +24,7 @@
     <p class="hint">Press any key to hide.</p>
   </aside>
   <script src="hemisphere.js"></script>
+  <button class="toggle-btn" onclick="toggleExplanation()">toggle explanation</button>
+  <script>function toggleExplanation(){var p=document.getElementById("explanation");p.style.display=p.style.display==="none"?"":"none"}</script>
 </body>
 </html>

@@ -28,7 +28,7 @@
 </head>
 <body>
   <a href="index.html" class="back-to-index">← back to index</a>
-  <aside id="explanation">
+  <aside id="explanation" onclick="toggleExplanation()">
     <h2>Toon shader 4 — shininess-driven highlight</h2>
     <p>Same 4 bands as toon shader 3, but the highlight band's size is per-object. Set via <code>shininess()</code> alongside the material colours.</p>
     <p>Inside the shader: <code>step(0.5, pow(N·L, shininess))</code>. For <code>x &lt; 1</code>, <code>pow(x, n)</code> shrinks toward zero as <code>n</code> grows — so high shininess gives a pinprick, low shininess gives a broad patch.</p>
@@ -36,5 +36,7 @@
     <p class="hint">Press any key to hide.</p>
   </aside>
   <script src="toon4.js"></script>
+  <button class="toggle-btn" onclick="toggleExplanation()">toggle explanation</button>
+  <script>function toggleExplanation(){var p=document.getElementById("explanation");p.style.display=p.style.display==="none"?"":"none"}</script>
 </body>
 </html>

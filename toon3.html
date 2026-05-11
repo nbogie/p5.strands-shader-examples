@@ -28,7 +28,7 @@
 </head>
 <body>
   <a href="index.html" class="back-to-index">← back to index</a>
-  <aside id="explanation">
+  <aside id="explanation" onclick="toggleExplanation()">
     <h2>Toon shader 3 — 4-band with highlight</h2>
     <p>Adds a fourth band — the specular highlight — using <code>specularMaterial()</code>. Three material slots feed the shader: shadow / base / highlight.</p>
     <p>Three thresholds (0.25, 0.6, 0.88) produce 4 zones. Computed in two mixes: first <code>mix(shadow, base, factorDiff)</code> for the diffuse half, then <code>mix(that, spec, factorSpec)</code> to overlay the highlight only where <code>N·L &gt; 0.88</code>.</p>
@@ -36,5 +36,7 @@
     <p class="hint">Press any key to hide.</p>
   </aside>
   <script src="toon3.js"></script>
+  <button class="toggle-btn" onclick="toggleExplanation()">toggle explanation</button>
+  <script>function toggleExplanation(){var p=document.getElementById("explanation");p.style.display=p.style.display==="none"?"":"none"}</script>
 </body>
 </html>
