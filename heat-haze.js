@@ -1,6 +1,7 @@
 let toonShader;
 let hazeFilter;
 
+let config = { useToonShader: true }
 const palette = {
   sky: "#f4d8a4",        // hazy peach sky
   sand: "#d4a574",       // warm sand horizon
@@ -24,7 +25,12 @@ function draw() {
   background(palette.sky);
   orbitControl();
 
-  shader(toonShader);
+  if (config.useToonShader) {
+    shader(toonShader);
+  } else {
+    resetShader()
+    lights()
+  }
 
   // Ground plane / horizon — laid flat far below the shapes.
   push();
@@ -32,7 +38,7 @@ function draw() {
   translate(0, 0, -160);
   ambientMaterial(palette.shadowSand);
   fill(palette.sand);
-  circle( 0, 0, 40000);
+  circle(0, 0, 40000);
   pop();
 
   ambientMaterial(palette.shadowWarm);
@@ -64,6 +70,11 @@ function draw() {
 }
 
 function keyPressed() {
+  if (key == "t") {
+    config.useToonShader = !config.useToonShader;
+    return;
+  }
+
   const panel = document.getElementById("explanation");
   if (panel) panel.style.display = panel.style.display === "none" ? "" : "none";
 }
@@ -123,3 +134,4 @@ function prepHazeFilter() {
   filterColor.set(result);
   filterColor.end();
 }
+
