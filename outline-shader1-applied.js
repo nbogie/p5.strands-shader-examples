@@ -67,7 +67,8 @@ function createRandomBuilding() {
     const big = createRandomBuildingPart("big");
     parts.push(big);
 
-    // 2 medium parts, scattered across the big's footprint.
+    // 2 medium parts, placed relative to the big (spread > 0.5 so they
+    // can poke past its silhouette — see the spread tuning below).
     for (let i = 0; i < 2; i++) {
         const medium = createRandomBuildingPart("medium", big);
         parts.push(medium);
