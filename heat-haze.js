@@ -92,6 +92,16 @@ function prepToonShader() {
   finalColor.end();
 }
 
+// How the filter works:
+// - filterColor.canvasContent is the rendered scene as a texture;
+//   filterColor.texCoord is the screen UV.
+// - Each output pixel samples the canvas at uv + (dx, dy) where dx/dy
+//   come from two noise fields with `y - t * 2`, so the noise scrolls
+//   upward over time.
+// - Multiplied by pow(uv.y, 1.5) so the bottom (hot sand) shimmers
+//   strongly and the top (cooler air) is barely affected.
+// - High x-frequency / low y-frequency on the noise → narrow vertical
+//   ripple bands shaped like rising heat columns.
 function prepHazeFilter() {
   filterColor.begin();
   const t = millis() * 0.001;
