@@ -12,7 +12,8 @@ let palette = {
   green: "#4aad8b",
   yellow: "#f3b551",
   // shadowColor: "#30022d"
-  shadowColor: "#584156"
+  shadowColor: "#584156",
+  seaColor: "#185cab"
 };
 function setup() {
   createCanvas(700, 700, WEBGL);
@@ -27,13 +28,13 @@ function draw() {
 
   shader(planetShader);
   const planetSize = 110;
-  ambientMaterial(palette.shadowColor);
+  ambientMaterial(palette.seaColor);
   push();
   translate(0, 0, 0);
   push()
   rotateY(config.rotationsPerSec * TWO_PI * millis() / 1000);
   fill(palette.green);
-  sphere(planetSize, 48, 32);
+  sphere(planetSize, 48, 64);
   // fill(255,  101);
   shader(cloudShader)
   sphere(planetSize * 1.05, 48, 64);
@@ -47,6 +48,10 @@ function prepPlanetShader() {
   let baseColor = sharedVec4();
   let shadowColor = sharedVec3();
   let factor = sharedFloat();
+
+  let highLandColor = "#dbdbdb";
+  let lowLandColor = "#368925";
+
 
   let objPos = sharedVec3();
   objectInputs.begin();
@@ -84,21 +89,20 @@ function prepCloudShader() {
   let shadowColor = sharedVec3();
   let factor = sharedFloat();
 
-  let objPos = sharedVec3();
-
-  objectInputs.begin();
-
+  
 //question: do we want to change the cloud heights to fit to our ridiculous terrain heights?
   //calc terrain height again (but we are scaled)
+  let objPos = sharedVec3();
+  objectInputs.begin();
   noiseDetail(5)
   objPos = objectInputs.position;
   let ampTerra = 0.2;
   let noiseScaleTerra = 0.9;
-  let hTerra = ampTerra * (noise(objPos * noiseScaleTerra) - 0.5);
-  objectInputs.position += objectInputs.normal * 1 * hTerra;
-  
-
-  // objPos.y *= 4;
+  let noiseValTerra = noise(objPos * noiseScaleTerra)
+  let landHeight = ampTerra * (noiseValTerra - 0.5);
+  landHeight = max(landHeight, 0)
+  objectInputs.normal
+  objectInputs.position += objectInputs.normal * 1 * landHeight;
   
   let amp = 3;
   noiseDetail(5)
