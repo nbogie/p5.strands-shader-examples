@@ -18,6 +18,7 @@
     <p>Each shape is drawn <strong>twice</strong>: first scaled up ~10% as a dark hull with back-face culling so only the rear shell is visible, then again at normal size as a lit fill on top. The hull peeks out around the silhouette and reads as an outline.</p>
     <p>One quirk: p5's projection matrix flips the y axis, which reverses triangle winding in clip space. So pass 1 culls <code>BACK</code> and pass 2 culls <code>FRONT</code> — opposite to most graphics tutorials.</p>
     <p>The outline thickness is a fraction of object size, so it varies with distance. See outline 2 for a constant-pixel-width version.</p>
+    <p><em>Note:</em> this sketch barely uses strands. The whole outline effect comes from CPU-side <code>scale()</code> + <code>cullFace()</code>; the strands material is just <code>finalColor.set([0.2, 0.2, 0.2, 1])</code> — a constant dark grey. <code>fill()</code> would do the same job. See outline 2 for a version where strands actually pulls its weight (per-vertex normal push in <code>cameraInputs</code> for constant pixel width).</p>
   </aside>
   <script src="outline1.js"></script>
   <button class="toggle-btn" onclick="toggleExplanation()">toggle explanation</button>
