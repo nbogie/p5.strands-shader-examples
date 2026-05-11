@@ -29,8 +29,24 @@ function draw() {
   rotateY(frameCount * 0.013);
   rotateX(frameCount * 0.008);
   fill(palette.green);
-  torus(80, 32);
+  torus(80, 32, 40, 40);
   pop();
+
+  push();
+  translate(0, -250, 0);
+  rotateY(frameCount * 0.013);
+  rotateX(frameCount * 0.008);
+  fill(palette.green);
+  torus(80, 32, 40, 40);
+  pop();
+  push();
+  translate(0, 250, 0);
+  rotateY(frameCount * 0.013);
+  rotateX(frameCount * 0.008);
+  fill(palette.green);
+  torus(80, 32, 40, 40);
+  pop();
+
 
   push();
   translate(220, 0, 0);
