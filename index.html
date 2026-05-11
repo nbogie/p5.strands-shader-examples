@@ -96,7 +96,7 @@
             <h2>Toon shaders</h2>
             <ul>
                 <li>
-                    <a class="sketch-link" href="toon.html">
+                    <a class="sketch-link" href="toon1.html">
                         <span class="label">Toon shader 1</span>
                         <div class="desc">
                             3-band quantized diffuse using
@@ -146,8 +146,8 @@
                     </a>
                 </li>
                 <li>
-                    <a class="sketch-link" href="fresnel.html">
-                        <span class="label">Fresnel (rim light)</span>
+                    <a class="sketch-link" href="fresnel1.html">
+                        <span class="label">Fresnel 1 (rim light)</span>
                         <div class="desc">
                             Bright glow at silhouettes via
                             <code>pow(1 - n.z, 3)</code>. Stylized rim
@@ -225,6 +225,28 @@
                             samples the rendered canvas at a noise-displaced
                             UV that scrolls upward over time. Silhouettes
                             shimmer like rising desert air.
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="sketch-link" href="godrays1.html">
+                        <span class="label">Godrays 1 — occluded radial blur</span>
+                        <div class="desc">
+                            Crepuscular rays via screen-space radial
+                            accumulation toward the sun's UV. Bright streaks
+                            emanate from the sun and are <em>naturally
+                            occluded</em> by dark foreground silhouettes.
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="sketch-link" href="godrays2.html">
+                        <span class="label">Godrays 2 — procedural overlay</span>
+                        <div class="desc">
+                            Cheaper stylised version: angular bands from
+                            <code>sin(angle * N)</code> with noise wobble.
+                            No scene awareness — rays slice through any
+                            geometry in their way.
                         </div>
                     </a>
                 </li>
