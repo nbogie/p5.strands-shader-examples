@@ -27,8 +27,8 @@ function draw() {
   translate(-130, 0, 0);
   drawPlanet({
     radius: 110,
-    seaColor: "turquoise",
-    landColor: "green",
+    seaColor: "#56eeff",
+    landColor: "brown",
     cloudColor: "white",
     nSeed: 321
   });
@@ -38,8 +38,8 @@ function draw() {
   translate(130, 0, 0);
   drawPlanet({
     radius: 90,
-    seaColor: "orange",
-    landColor: "brown",
+    seaColor: "#57e6fc",
+    landColor: "#2d901186",
     cloudColor: "pink",
     nSeed: 123
   });
@@ -90,8 +90,8 @@ function prepPlanetShader() {
   seaColor = pixelInputs.ambientMaterial;
   pixelInputs.end();
 
-  const isSea = step(landHeight, 0);
-  const t = clamp(landHeight * 20, 0, 1);
+  const isSea =  smoothstep(0.002, 0.001, landHeight);
+  const t = clamp(landHeight * 10, 0, 1);
   const land = mix(baseColor.rgb, highLandColor, t);
   const terrainColor = mix(land, seaColor, isSea);
 
