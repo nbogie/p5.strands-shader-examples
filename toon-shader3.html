@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>toon shader - p5.strands</title>
+  <title>toon shader 3 - p5.strands</title>
   <link rel="stylesheet" href="style.css">
   <style>
     #explanation {
@@ -28,12 +28,12 @@
 </head>
 <body>
   <aside id="explanation">
-    <h2>Toon shader 1 — base 3-band</h2>
-    <p>Quantized diffuse lighting on a single material slot. Reads <code>fill()</code> only.</p>
-    <p>For each pixel: compute <code>N·L</code> against a hard-coded view-space light direction, then quantize with two <code>step()</code> calls to one of three intensities (<code>0.35</code>, <code>0.7</code>, <code>1.0</code>). Multiply the base color by that intensity.</p>
-    <p>Limitation: shadow tone is just a dimmed version of the base color — no separate hue.</p>
+    <h2>Toon shader 3 — 4-band with highlight</h2>
+    <p>Adds a fourth band — the specular highlight — using <code>specularMaterial()</code>. Three material slots feed the shader: shadow / base / highlight.</p>
+    <p>Three thresholds (0.25, 0.6, 0.88) produce 4 zones. Computed in two mixes: first <code>mix(shadow, base, factorDiff)</code> for the diffuse half, then <code>mix(that, spec, factorSpec)</code> to overlay the highlight only where <code>N·L &gt; 0.88</code>.</p>
+    <p>Highlight threshold is the same for every object — see toon-shader 4 for per-object control.</p>
     <p class="hint">Press any key to hide.</p>
   </aside>
-  <script src="toon-shader.js"></script>
+  <script src="toon-shader3.js"></script>
 </body>
 </html>

@@ -1,4 +1,8 @@
-//generated with claude code
+// 4-band toon shader. Bands map to:
+// * shadow  — from ambientMaterial()
+// * mid     — half-mix between shadow and base
+// * lit     — from fill()
+// * highlight — from specularMaterial(), drawn only at the brightest band
 
 let toonShader;
 let palette = {
@@ -6,8 +10,10 @@ let palette = {
   red: "#e15147",
   green: "#4aad8b",
   yellow: "#f3b551",
-  shadowColor: "#30022d"
+  shadowColor: "#30022d",
+  highlight: "#ecd9d9",
 };
+
 function setup() {
   createCanvas(700, 700, WEBGL);
   noStroke();
@@ -30,6 +36,8 @@ function keyPressed() {
 
 function drawRotatingShapes() {
   ambientMaterial(palette.shadowColor);
+  specularMaterial(palette.highlight);
+
   push();
   translate(-220, 0, 0);
   rotateY(frameCount * 0.01);
@@ -44,6 +52,7 @@ function drawRotatingShapes() {
   fill(palette.green);
   torus(80, 32);
   pop();
+
   push();
   translate(220, 0, 0);
   rotateZ(frameCount * 0.012);
@@ -52,40 +61,40 @@ function drawRotatingShapes() {
   pop();
 }
 
-//toon shader. how it works:
-// Accesses and stores from pixelInputs: 
-// * .color - from fill(). For our purposes, the base colour.
-// * .ambientMaterial. For our purposes, the shadow colour.
-// finds N: view-space normal.
-// computes a view-space dot(N,L) against a hard-coded light direction, L
-// giving us intensity.
-// quantizes intensity into 3 mix-weights: 0 (shadow), 0.5 (midtone), 1 (lit)
-// finalColor = mix(shadowColor, baseColor, weight)
-// note: if ambientMaterial isn't set, it defaults to the fill colour,
-// so without calling ambientMaterial() the result is flat.
 function prepToonShader() {
   let baseColor = sharedVec4();
   let shadowColor = sharedVec3();
-  let factor = sharedFloat();
+  let specColor = sharedVec3();
+  let factorDiff = sharedFloat();
+  let factorSpec = sharedFloat();
 
   pixelInputs.begin();
   baseColor = pixelInputs.color;
   shadowColor = pixelInputs.ambientMaterial;
+  specColor = pixelInputs.specularMaterial;
 
   const n = normalize(pixelInputs.normal);
   const ndotl = max(n.x * 0.42 + n.y * -0.53 + n.z * 0.74, 0);
 
+  // 3 thresholds → 4 bands: shadow, mid, lit, highlight.
   const b1 = step(0.25, ndotl);
-  const b2 = step(0.65, ndotl);
-  factor = 0.5 * b1 + 0.5 * b2;
+  const b2 = step(0.6, ndotl);
+  const b3 = step(0.88, ndotl);
+  factorDiff = 0.5 * b1 + 0.5 * b2; // 0, 0.5, 1, 1
+  factorSpec = b3;                  // 0, 0, 0, 1
   pixelInputs.end();
 
   finalColor.begin();
-  const inv = 1 - factor;
+  // Two-step mix: shadow → base by factorDiff, then result → spec by factorSpec.
+  const invD = 1 - factorDiff;
+  const dr = shadowColor.x * invD + baseColor.x * factorDiff;
+  const dg = shadowColor.y * invD + baseColor.y * factorDiff;
+  const db = shadowColor.z * invD + baseColor.z * factorDiff;
+  const invS = 1 - factorSpec;
   finalColor.set([
-    shadowColor.x * inv + baseColor.x * factor,
-    shadowColor.y * inv + baseColor.y * factor,
-    shadowColor.z * inv + baseColor.z * factor,
+    dr * invS + specColor.x * factorSpec,
+    dg * invS + specColor.y * factorSpec,
+    db * invS + specColor.z * factorSpec,
     baseColor.w,
   ]);
   finalColor.end();

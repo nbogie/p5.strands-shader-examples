@@ -22,6 +22,11 @@ function draw() {
   drawRotatingShapes();
 }
 
+function keyPressed() {
+  const panel = document.getElementById("explanation");
+  if (panel) panel.style.display = panel.style.display === "none" ? "" : "none";
+}
+
 function drawRotatingShapes() {
   push();
   translate(-220, 0, 0);

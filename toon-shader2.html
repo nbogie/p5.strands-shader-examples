@@ -5,9 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>toon shader 2 - p5.strands</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    #explanation {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      max-width: 360px;
+      background: rgba(255, 255, 255, 0.94);
+      padding: 14px 18px;
+      border-radius: 8px;
+      font-family: system-ui, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    #explanation h2 { margin: 0 0 8px; font-size: 15px; }
+    #explanation p { margin: 0 0 8px; }
+    #explanation .hint { margin: 0; font-size: 11px; color: #666; }
+    #explanation code { background: #eee; padding: 1px 4px; border-radius: 3px; font-size: 12px; }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
 </head>
 <body>
+  <aside id="explanation">
+    <h2>Toon shader 2 — separate shadow colour</h2>
+    <p>Same 3 bands, but the shadow tone is its own colour, not a darker base. Reads <code>fill()</code> (lit) and <code>ambientMaterial()</code> (shadow).</p>
+    <p>Quantize <code>N·L</code> into a mix weight <code>w ∈ {0, 0.5, 1.0}</code>, then <code>final = mix(shadowColor, baseColor, w)</code>.</p>
+    <p>If <code>ambientMaterial()</code> isn't set, p5 falls back to the fill colour, so the result is flat. Always call both.</p>
+    <p class="hint">Press any key to hide.</p>
+  </aside>
   <script src="toon-shader2.js"></script>
 </body>
 </html>
