@@ -10,10 +10,10 @@ let palette = {
   bg: "#1a1a1a",
   red: "#e15147",
   green: "#4aad8b",
-  yellow: "#f3b551",
+  yellow: "#92703a",
   // shadowColor: "#30022d"
   shadowColor: "#584156",
-  seaColor: "#185cab"
+  seaColor: "#338874"
 };
 function setup() {
   createCanvas(700, 700, WEBGL);
@@ -33,7 +33,7 @@ function draw() {
   translate(0, 0, 0);
   push()
   rotateY(config.rotationsPerSec * TWO_PI * millis() / 1000);
-  fill(palette.green);
+  fill(palette.yellow);
   sphere(planetSize, 48, 64);
   // fill(255,  101);
   shader(cloudShader)
@@ -46,11 +46,10 @@ function draw() {
 
 function prepPlanetShader() {
   let baseColor = sharedVec4();
-  let shadowColor = sharedVec3();
+  let seaColor = sharedVec3();
   let factor = sharedFloat();
 
-  let highLandColor = "#dbdbdb";
-  let lowLandColor = "#368925";
+  let highLandColor = [0.9, 0.9, 0.9];
 
 
   let objPos = sharedVec3();
@@ -66,19 +65,19 @@ function prepPlanetShader() {
   objectInputs.position += objectInputs.normal * 1 * landHeight;
   objectInputs.end();
   
-
-
+  //just to get base (fill) and sea (ambient material) colours from obj.
   pixelInputs.begin();
   baseColor = pixelInputs.color;
-  shadowColor = pixelInputs.ambientMaterial;
-
+  seaColor = pixelInputs.ambientMaterial;
   pixelInputs.end();
 
+  const isSea = step(landHeight, 0);
+  const t     = clamp(landHeight*20, 0, 1);
+  const land  = mix(baseColor.rgb, highLandColor, t);
+  const terrainColor = mix(land, seaColor, isSea);
+
   finalColor.begin();
-  const c = mix(shadowColor, baseColor.rgb,  landHeight*10)
-  // const inv = 1 - factor;
-  // const c = shadowColor * inv + baseColor.rgb * factor;
-  finalColor.set([vec3(c), baseColor.a]);
+  finalColor.set([terrainColor, baseColor.a]);
   finalColor.end();
 }
 
