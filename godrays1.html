@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>godrays 1 — occluded radial blur - p5.strands</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #explanation { position: fixed; top: 20px; left: 20px; max-width: 380px; background: rgba(255,255,255,0.94); padding: 14px 18px; border-radius: 8px; font-family: system-ui, sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    #explanation code { background: #eee; padding: 1px 4px; border-radius: 3px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
+</head>
+<body>
+  <a href="index.html" class="back-to-index">← back to index</a>
+  <aside id="explanation" onclick="toggleExplanation()" style="display: none">
+    <h2>Godrays 1 — occluded radial blur</h2>
+    <p>Crepuscular rays / "godrays" as a post-process <code>buildFilterShader</code>. For each output pixel, the shader walks in screen-space toward a fixed sun UV, sampling the already-rendered canvas at each step and adding a decaying weighted sum back on top of the base pixel.</p>
+    <p>The sum is high when the line from pixel to sun passes through the bright disc, and low when it's interrupted by dark foreground geometry — so the bright streaks <strong>automatically occlude</strong> against silhouettes. Move the cube/sphere/torus in front of the sun and you'll see the rays cut behind them.</p>
+    <p>Knobs in <code>prepGodraysFilter</code>:</p>
+    <ul>
+      <li><code>samples</code> — number of steps along the ray (32 here). More = smoother and heavier.</li>
+      <li><code>density</code> — how far each pixel reaches toward the light (0..1).</li>
+      <li><code>decay</code> — per-step fadeoff. <1 weights closer-to-source samples higher.</li>
+      <li><code>exposure</code> — overall strength of the added rays.</li>
+    </ul>
+    <p>The scene is set up specifically to suit this filter: a near-white sun against a very dark sky, with near-black foreground shapes. Higher contrast = more visible rays. Compare with godrays 2 for a cheaper version that ignores geometry.</p>
+  </aside>
+  <script src="godrays1.js"></script>
+  <button class="toggle-btn" onclick="toggleExplanation()">toggle explanation</button>
+  <script>function toggleExplanation(){var p=document.getElementById("explanation");p.style.display=p.style.display==="none"?"":"none"}</script>
+</body>
+</html>

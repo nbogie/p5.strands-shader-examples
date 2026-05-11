@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>godrays 2 — procedural overlay - p5.strands</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #explanation { position: fixed; top: 20px; left: 20px; max-width: 380px; background: rgba(255,255,255,0.94); padding: 14px 18px; border-radius: 8px; font-family: system-ui, sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    #explanation code { background: #eee; padding: 1px 4px; border-radius: 3px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
+</head>
+<body>
+  <a href="index.html" class="back-to-index">← back to index</a>
+  <aside id="explanation" onclick="toggleExplanation()" style="display: none">
+    <h2>Godrays 2 — procedural overlay (no occlusion)</h2>
+    <p>A cheap stylised "sun rays" overlay drawn straight over the rendered scene. For each pixel:</p>
+    <ol>
+      <li>Compute angle and distance from a fixed sun UV (using <code>atan(dy, dx)</code>).</li>
+      <li><code>sin(angle * 14 + wobble)</code> produces 14 alternating bright/dark bands radiating outward.</li>
+      <li>A <code>noise(angle, t)</code> term in <code>wobble</code> slowly fans the bands so they breathe.</li>
+      <li><code>pow(rays, 5)</code> sharpens — most pixels are dark, only ray centres are bright.</li>
+      <li>Radial falloff so the rays fade before reaching the corners.</li>
+      <li>Warm tint, added (not multiplied) on top of the base pixel.</li>
+    </ol>
+    <p>Compared with <a href="godrays1.html">godrays 1</a>: this is much cheaper — no per-pixel canvas re-sampling — but it has <strong>no idea where the geometry is</strong>, so the rays slice straight through foreground shapes. Read it as a stylised flourish, not as physical light scattering.</p>
+  </aside>
+  <script src="godrays2.js"></script>
+  <button class="toggle-btn" onclick="toggleExplanation()">toggle explanation</button>
+  <script>function toggleExplanation(){var p=document.getElementById("explanation");p.style.display=p.style.display==="none"?"":"none"}</script>
+</body>
+</html>
