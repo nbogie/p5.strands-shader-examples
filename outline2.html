@@ -5,10 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>outline shader 2 — constant pixel width</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    #explanation { position: fixed; top: 20px; left: 20px; max-width: 360px; background: rgba(255,255,255,0.94); padding: 14px 18px; border-radius: 8px; font-family: system-ui, sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    #explanation code { background: #eee; padding: 1px 4px; border-radius: 3px; }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
 </head>
 <body>
   <a href="index.html" class="back-to-index">← back to index</a>
+  <aside id="explanation" onclick="toggleExplanation()" style="display: none">
+    <h2>Outline 2 — constant pixel width</h2>
+    <p>Same inverted-hull recipe as outline 1, but with a smarter inflation: instead of <code>scale(1.1)</code>, each vertex is pushed along its view-space normal by an amount proportional to the view-space depth.</p>
+    <p>The upcoming perspective divide (which scales screen size by <code>1/z</code>) cancels the depth scaling — so the on-screen outline is the same pixel thickness on a far cube as on a close one.</p>
+    <p><strong>Smooth-normal meshes only</strong>: <code>box()</code> would split into floating quads, since its faces have per-face normals that disagree at the corners.</p>
+  </aside>
   <script src="outline2.js"></script>
+  <button class="toggle-btn" onclick="toggleExplanation()">toggle explanation</button>
+  <script>function toggleExplanation(){var p=document.getElementById("explanation");p.style.display=p.style.display==="none"?"":"none"}</script>
 </body>
 </html>

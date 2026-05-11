@@ -74,3 +74,8 @@ function drawGround() {
     circle(0, 0, 5000);
     pop();
 }
+
+function keyPressed() {
+  const panel = document.getElementById("explanation");
+  if (panel) panel.style.display = panel.style.display === "none" ? "" : "none";
+}

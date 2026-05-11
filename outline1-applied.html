@@ -5,10 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>outline shader 1 — applied (drifting buildings)</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    #explanation { position: fixed; top: 20px; left: 20px; max-width: 360px; background: rgba(255,255,255,0.94); padding: 14px 18px; border-radius: 8px; font-family: system-ui, sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    #explanation code { background: #eee; padding: 1px 4px; border-radius: 3px; }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
 </head>
 <body>
   <a href="index.html" class="back-to-index">← back to index</a>
+  <aside id="explanation" onclick="toggleExplanation()" style="display: none">
+    <h2>Outline 1 — applied</h2>
+    <p>The minimal inverted-hull outline applied to a small scene. Each building is a hierarchy of stacked cubes — one big, two mediums, several smalls — drifting toward random target points and rotating at its own pace.</p>
+    <p>The outline is applied <em>per cube</em> inside a building, then internal seams are covered by the per-part lit fills, so only the building's exterior silhouette shows the outline.</p>
+    <p>Part colours are picked from a palette via a biased random function (heavier weight on the first colour), which gives each building a "dominant colour with accents" feel.</p>
+  </aside>
   <script src="outline1-applied.js"></script>
+  <button class="toggle-btn" onclick="toggleExplanation()">toggle explanation</button>
+  <script>function toggleExplanation(){var p=document.getElementById("explanation");p.style.display=p.style.display==="none"?"":"none"}</script>
 </body>
 </html>

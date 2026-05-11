@@ -5,10 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>twist shader</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    #explanation { position: fixed; top: 20px; left: 20px; max-width: 360px; background: rgba(255,255,255,0.94); padding: 14px 18px; border-radius: 8px; font-family: system-ui, sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    #explanation code { background: #eee; padding: 1px 4px; border-radius: 3px; }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
 </head>
 <body>
   <a href="index.html" class="back-to-index">← back to index</a>
+  <aside id="explanation" onclick="toggleExplanation()" style="display: none">
+    <h2>Twist</h2>
+    <p>Vertex twist around the y axis. In <code>objectInputs</code>, <code>position.xz</code> is rotated by an angle proportional to <code>position.y</code> — so the top of a mesh rotates a lot, the middle rotates a little, the bottom rotates the other way.</p>
+    <p>The twist amount oscillates over time via <code>sin(t)</code>, so the shapes appear to wring back and forth.</p>
+    <p>For a visible barber-pole spiral, the geometry needs <strong>vertices at multiple y levels</strong> (high <code>detailY</code> on cylinder/cone). Otherwise the top and bottom just shear past each other and the surface looks flat.</p>
+  </aside>
   <script src="twist.js"></script>
+  <button class="toggle-btn" onclick="toggleExplanation()">toggle explanation</button>
+  <script>function toggleExplanation(){var p=document.getElementById("explanation");p.style.display=p.style.display==="none"?"":"none"}</script>
 </body>
 </html>

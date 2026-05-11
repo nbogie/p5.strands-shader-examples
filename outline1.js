@@ -69,3 +69,8 @@ function drawOutlinedCube(pos) {
  * everywhere the real mesh is closer.
 in graphics, a negative scale on any axis reverses triangle winding. p5 has y-down for consistency with 2D mode, and it implements that with a -y in the projection matrix — which has the side effect of inverting the meaning of FRONT/BACK relative to most graphics tutorials you'll find. If you ever see a sketch that needs face culling and the directions feel "backwards", that's why.
 */
+
+function keyPressed() {
+  const panel = document.getElementById("explanation");
+  if (panel) panel.style.display = panel.style.display === "none" ? "" : "none";
+}

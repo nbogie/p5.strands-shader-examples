@@ -231,3 +231,8 @@ function outline() {
 
     finalColor.end();
 }
+
+function keyPressed() {
+  const panel = document.getElementById("explanation");
+  if (panel) panel.style.display = panel.style.display === "none" ? "" : "none";
+}

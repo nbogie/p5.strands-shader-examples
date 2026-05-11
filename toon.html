@@ -28,7 +28,7 @@
 </head>
 <body>
   <a href="index.html" class="back-to-index">← back to index</a>
-  <aside id="explanation" onclick="toggleExplanation()">
+  <aside id="explanation" onclick="toggleExplanation()" style="display: none">
     <h2>Toon shader 1 — base 3-band</h2>
     <p>Quantized diffuse lighting on a single material slot. Reads <code>fill()</code> only.</p>
     <p>For each pixel: compute <code>N·L</code> against a hard-coded view-space light direction, then quantize with two <code>step()</code> calls to one of three intensities (<code>0.35</code>, <code>0.7</code>, <code>1.0</code>). Multiply the base color by that intensity.</p>

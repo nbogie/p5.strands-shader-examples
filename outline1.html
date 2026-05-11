@@ -5,10 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>outline shader 1 — minimal inverted-hull</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    #explanation { position: fixed; top: 20px; left: 20px; max-width: 360px; background: rgba(255,255,255,0.94); padding: 14px 18px; border-radius: 8px; font-family: system-ui, sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    #explanation code { background: #eee; padding: 1px 4px; border-radius: 3px; }
+  </style>
   <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
 </head>
 <body>
   <a href="index.html" class="back-to-index">← back to index</a>
+  <aside id="explanation" onclick="toggleExplanation()" style="display: none">
+    <h2>Outline 1 — minimal inverted-hull</h2>
+    <p>Each shape is drawn <strong>twice</strong>: first scaled up ~10% as a dark hull with back-face culling so only the rear shell is visible, then again at normal size as a lit fill on top. The hull peeks out around the silhouette and reads as an outline.</p>
+    <p>One quirk: p5's projection matrix flips the y axis, which reverses triangle winding in clip space. So pass 1 culls <code>BACK</code> and pass 2 culls <code>FRONT</code> — opposite to most graphics tutorials.</p>
+    <p>The outline thickness is a fraction of object size, so it varies with distance. See outline 2 for a constant-pixel-width version.</p>
+  </aside>
   <script src="outline1.js"></script>
+  <button class="toggle-btn" onclick="toggleExplanation()">toggle explanation</button>
+  <script>function toggleExplanation(){var p=document.getElementById("explanation");p.style.display=p.style.display==="none"?"":"none"}</script>
 </body>
 </html>

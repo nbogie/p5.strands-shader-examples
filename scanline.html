@@ -16,7 +16,7 @@
 </head>
 <body>
   <a href="index.html" class="back-to-index">← back to index</a>
-  <aside id="explanation" onclick="toggleExplanation()">
+  <aside id="explanation" onclick="toggleExplanation()" style="display: none">
     <h2>Scanline (CRT-inspired)</h2>
     <p>Mimic an old TV / arcade CRT. Lit Lambertian fill, darkened by alternating horizontal lines, then green-tinted to suggest phosphor and slightly reduced in saturation.</p>
     <p>Each pixel asks "is this row light or dark?" via <code>step(0.5, fract(viewY * 0.5))</code> where <code>viewY</code> is the view-space y position (passed down from <code>cameraInputs</code>). That keeps lines roughly horizontal on screen even as the camera orbits — true screen-space scanlines would need post-process framebuffer access.</p>

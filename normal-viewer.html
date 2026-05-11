@@ -16,7 +16,7 @@
 </head>
 <body>
   <a href="index.html" class="back-to-index">← back to index</a>
-  <aside id="explanation" onclick="toggleExplanation()">
+  <aside id="explanation" onclick="toggleExplanation()" style="display: none">
     <h2>Normal viewer</h2>
     <p>Diagnostic shader: maps each pixel's surface normal directly to RGB. Each component goes from [-1,1] → [0,1] via <code>n * 0.5 + 0.5</code>.</p>
     <p>The sphere shows a smooth gradient (every normal direction visible). The box shows 6 solid colours — one per face — because its normals are constant across each face.</p>
