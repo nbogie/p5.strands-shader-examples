@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bumps - p5.strands</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #explanation { position: fixed; top: 20px; left: 20px; max-width: 360px; background: rgba(255,255,255,0.94); padding: 14px 18px; border-radius: 8px; font-family: system-ui, sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    #explanation code { background: #eee; padding: 1px 4px; border-radius: 3px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
+</head>
+<body>
+  <a href="index.html" class="back-to-index">← back to index</a>
+  <aside id="explanation">
+    <h2>Bumps (procedural normal perturbation)</h2>
+    <p>The surfaces look bumpy, but no extra geometry was added. The trick is to <strong>perturb each pixel's normal vector</strong> based on a noise field, then let the default Phong lighting compute the lit colour using the wobbly normals.</p>
+    <p>Three noise samples (at slightly offset positions) give independent x/y/z shifts. Add them into <code>pixelInputs.normal</code>, then call <code>normalize()</code> so the new direction is still a unit vector.</p>
+    <p>Frequency controls bump density; amplitude controls roughness. Try <code>f = 8</code> for orange-peel, <code>f = 40</code> for fine grit.</p>
+  </aside>
+  <script src="bumps.js"></script>
+</body>
+</html>

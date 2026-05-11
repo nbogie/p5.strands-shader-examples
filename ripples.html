@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ripples - p5.strands</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #explanation { position: fixed; top: 20px; left: 20px; max-width: 360px; background: rgba(255,255,255,0.94); padding: 14px 18px; border-radius: 8px; font-family: system-ui, sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    #explanation code { background: #eee; padding: 1px 4px; border-radius: 3px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
+</head>
+<body>
+  <a href="index.html" class="back-to-index">← back to index</a>
+  <aside id="explanation">
+    <h2>Ripples (sinusoidal bump pattern)</h2>
+    <p>Same idea as <em>bumps</em> — perturb the per-pixel normal so default lighting paints in apparent surface detail — but with a regular pattern instead of noise.</p>
+    <p>Two orthogonal sine waves: <code>normal.x += sin(pos.y * f)</code> tilts the surface left/right based on y, <code>normal.z += cos(pos.x * f)</code> tilts in/out based on x. Together they create the crosshatched ripple texture you see.</p>
+    <p>Compared to noise bumps: more predictable, more obvious. Looks like a corduroy or quilted fabric. Useful for "manufactured" surfaces (grilles, woven fabric) vs the "organic" feel of noise.</p>
+  </aside>
+  <script src="ripples.js"></script>
+</body>
+</html>
