@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wave - p5.strands</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #explanation { position: fixed; top: 20px; left: 20px; max-width: 360px; background: rgba(255,255,255,0.94); padding: 14px 18px; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; line-height: 1.5; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    #explanation h2 { margin: 0 0 8px; font-size: 15px; }
+    #explanation p { margin: 0 0 8px; }
+    #explanation .hint { margin: 0; font-size: 11px; color: #666; }
+    #explanation code { background: #eee; padding: 1px 4px; border-radius: 3px; font-size: 12px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
+</head>
+<body>
+  <a href="index.html" class="back-to-index">← back to index</a>
+  <aside id="explanation">
+    <h2>Wave</h2>
+    <p>Classic vertex-displacement wave. In <code>worldInputs</code> (post model matrix, so world units), add to <code>position.y</code> by a sine of time + <code>position.x</code> &times; a frequency.</p>
+    <p>Five spheres are lined up along the x axis so you can watch the wave move through them. Each sphere's individual vertices wobble too, since each vertex has its own world x.</p>
+    <p>Uses <code>worldInputs</code> (not <code>objectInputs</code>) so the math is in real-world units — much easier to reason about wavelength and amplitude.</p>
+    <p class="hint">Press any key to hide.</p>
+  </aside>
+  <script src="wave-shader.js"></script>
+</body>
+</html>

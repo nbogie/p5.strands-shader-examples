@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hemisphere lighting - p5.strands</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #explanation { position: fixed; top: 20px; left: 20px; max-width: 360px; background: rgba(255,255,255,0.94); padding: 14px 18px; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; line-height: 1.5; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    #explanation h2 { margin: 0 0 8px; font-size: 15px; }
+    #explanation p { margin: 0 0 8px; }
+    #explanation .hint { margin: 0; font-size: 11px; color: #666; }
+    #explanation code { background: #eee; padding: 1px 4px; border-radius: 3px; font-size: 12px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
+</head>
+<body>
+  <a href="index.html" class="back-to-index">← back to index</a>
+  <aside id="explanation">
+    <h2>Hemisphere lighting</h2>
+    <p>Cheap "global" lighting in one line: mix between a sky colour (above) and a ground colour (below) based on the normal's vertical component.</p>
+    <p>Formula: <code>mix(groundColor, skyColor, n.y * 0.5 + 0.5)</code>. In p5's view space, +y points down, so we use <code>-n.y</code> to mean "facing up". Surfaces facing the sky get the sky tint, surfaces facing the ground get the ground tint, and slopes get an interpolated colour.</p>
+    <p>No light setup needed. Surprisingly readable for free.</p>
+    <p class="hint">Press any key to hide.</p>
+  </aside>
+  <script src="hemisphere-shader.js"></script>
+</body>
+</html>

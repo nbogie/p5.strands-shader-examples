@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>p5.strands gotchas</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      align-items: flex-start;
+      padding: 2rem;
+      font-family: system-ui, sans-serif;
+      overflow: auto;
+    }
+    main { max-width: 50rem; width: 100%; }
+    code, pre { background: #eee; border-radius: 0.25rem; font-family: ui-monospace, monospace; }
+    code { padding: 0 0.25rem; }
+    pre { padding: 0.75rem 1rem; overflow-x: auto; }
+    .label { display: inline-block; padding: 0 0.4rem; border-radius: 0.2rem; margin-right: 0.4rem; }
+    .symptom { background: #ffe7e7; color: #8a0000; }
+    .fix { background: #e2f4dc; color: #1d5e1d; }
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-to-index">← back to index</a>
+  <main>
+    <h1>p5.strands gotchas</h1>
+    <p>Things that bit us while building the sketches in this project. Not exhaustive — just the ones with a clear symptom and a clear workaround.</p>
+
+    <h2>1. <code>finalColor.set(node)</code> emits a hook with no return</h2>
+    <p><span class="label symptom">Symptom</span> Shader fails to compile with <code>ERROR: 'HOOK_getFinalColor' : Function does not return a value</code>.</p>
+    <p>Passing a single strand node (e.g. a <code>uniformVec4</code>) directly to <code>finalColor.set</code> emits a hook body that mentions the value but never <code>return</code>s it.</p>
+    <p><span class="label fix">Fix</span> Unpack into an array literal — strands constructs a fresh <code>vec4</code> and emits the return correctly.</p>
+<pre>// Broken
+finalColor.set(oc);
+
+// Works
+finalColor.set([oc.x, oc.y, oc.z, oc.w]);</pre>
+
+    <h2>2. <code>scalar * node</code> multiplication fails at runtime</h2>
+    <p><span class="label symptom">Symptom</span> <code>TypeError: X.mult is not a function</code> where X is a plain JS number.</p>
+    <p>The strands transpiler rewrites <code>a * b</code> as <code>a.mult(b)</code>. If the left operand is a plain JS number (not a strand node), it has no <code>.mult</code> and the shader throws.</p>
+    <p><span class="label fix">Fix</span> Put the strand node first. <code>0.35 * inv</code> → <code>inv * 0.35</code>.</p>
+
+    <h2>3. Unused uniforms are silently tree-shaken</h2>
+    <p><span class="label symptom">Symptom</span> <code>setUniform("name", value)</code> seems to do nothing. The shader runs but ignores your value.</p>
+    <p>If you declare <code>uniformVec4("name")</code> but never reference the returned node in your hook, strands omits the <code>uniform vec4 name;</code> from the compiled GLSL. <code>setUniform</code> then silently fails to find a binding.</p>
+    <p><span class="label fix">Fix</span> Make sure the node is actually used somewhere in your hook (e.g. in <code>finalColor.set([oc.x, oc.y, oc.z, oc.w])</code>). To verify, <code>console.log(myShader.fragSrc())</code> and search for the uniform declaration.</p>
+
+    <h2>4. <code>pixelInputs</code> has no <code>position</code></h2>
+    <p><span class="label symptom">Symptom</span> <code>pixelInputs.position</code> reads as undefined or compiles to garbage; can't get the surface point in the fragment stage.</p>
+    <p>The fragment-stage <code>Inputs</code> struct (in <code>phong.frag</code>) only contains <code>normal</code>, <code>texCoord</code>, <code>color</code>, plus lighting and material slots — no <code>position</code>.</p>
+    <p><span class="label fix">Fix</span> Capture the view-space position in <code>cameraInputs</code> and pass it down with a <code>sharedVec3</code>.</p>
+<pre>let viewPos = sharedVec3();
+
+cameraInputs.begin();
+viewPos = cameraInputs.position;
+cameraInputs.end();
+
+finalColor.begin();
+// ... use viewPos.x / .y / .z
+finalColor.end();</pre>
+
+    <h2>5. <code>finalColor.texCoord</code> documented but doesn't work in JS</h2>
+    <p><span class="label symptom">Symptom</span> Reading <code>finalColor.texCoord</code> from inside the block returns undefined; UV-driven effects in <code>finalColor</code> can't see the surface's UV.</p>
+    <p>The underlying GLSL hook signature <em>is</em> <code>HOOK_getFinalColor(vec4 color, vec2 texCoord)</code>, but the JS block-form getter for <code>texCoord</code> wasn't wired up at the time we tried it.</p>
+    <p><span class="label fix">Fix</span> Capture <code>pixelInputs.texCoord</code> into a <code>sharedVec2</code> and read it from <code>finalColor</code>.</p>
+
+    <h2>6. <code>box()</code> has per-face normals — normal-push tears it apart</h2>
+    <p><span class="label symptom">Symptom</span> A breathe / normal-push / constant-width-outline shader produces disjointed floating quads instead of an inflated mesh.</p>
+    <p>p5's <code>box()</code> stores per-face normals (each of the 6 faces has its own outward normal). When you displace each vertex along its normal, adjacent faces push in different directions and the mesh separates at the seams.</p>
+    <p><span class="label fix">Fix</span> Test normal-based effects on <code>sphere()</code> or <code>torus()</code>, which have welded, smoothly-interpolated normals. There's no clean fix for <code>box()</code> short of switching to a uniform-scale inflation.</p>
+
+    <h2>7. Built-in primitives are unit-sized in <code>objectInputs</code></h2>
+    <p><span class="label symptom">Symptom</span> A vertex-displacement shader designed around real dimensions (e.g. <code>position.y * 0.02</code> for a 320-unit-tall box) does nothing visible.</p>
+    <p>p5 builds <code>box()</code> / <code>cylinder()</code> / <code>cone()</code> / <code>sphere()</code> at unit size and applies your dimensions via the model matrix afterwards. So inside <code>objectInputs</code>, <code>position</code> components are in <code>[-0.5, 0.5]</code> regardless of what you passed to the primitive.</p>
+    <p><span class="label fix">Fix</span> Either (a) scale your factor up to match unit space (e.g. <code>* 5</code> in twist), or (b) switch to <code>worldInputs</code>, whose position is post-model-matrix and so in real-world units.</p>
+
+    <h2>8. Whole-vector <code>+=</code> on inputs.position is a no-op</h2>
+    <p><span class="label symptom">Symptom</span> <code>cameraInputs.position += someVec3</code> compiles but doesn't displace anything.</p>
+    <p>Only the component-wise mutations from the docs (<code>position.x += ...</code>, etc.) reliably round-trip. We couldn't get the whole-vector form to work.</p>
+    <p><span class="label fix">Fix</span> Write each component separately.</p>
+<pre>// Broken (silent)
+cameraInputs.position += normal * amount;
+
+// Works
+cameraInputs.position.x += normal.x * amount;
+cameraInputs.position.y += normal.y * amount;
+cameraInputs.position.z += normal.z * amount;</pre>
+  </main>
+</body>
+</html>

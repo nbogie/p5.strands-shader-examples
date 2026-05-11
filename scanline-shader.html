@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>scanline - p5.strands</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #explanation { position: fixed; top: 20px; left: 20px; max-width: 360px; background: rgba(255,255,255,0.94); padding: 14px 18px; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; line-height: 1.5; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    #explanation h2 { margin: 0 0 8px; font-size: 15px; }
+    #explanation p { margin: 0 0 8px; }
+    #explanation .hint { margin: 0; font-size: 11px; color: #666; }
+    #explanation code { background: #eee; padding: 1px 4px; border-radius: 3px; font-size: 12px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
+</head>
+<body>
+  <a href="index.html" class="back-to-index">← back to index</a>
+  <aside id="explanation">
+    <h2>Scanline (CRT-inspired)</h2>
+    <p>Mimic an old TV / arcade CRT. Lit Lambertian fill, darkened by alternating horizontal lines, then green-tinted to suggest phosphor and slightly reduced in saturation.</p>
+    <p>Each pixel asks "is this row light or dark?" via <code>step(0.5, fract(viewY * 0.5))</code> where <code>viewY</code> is the view-space y position (passed down from <code>cameraInputs</code>). That keeps lines roughly horizontal on screen even as the camera orbits — true screen-space scanlines would need post-process framebuffer access.</p>
+    <p>Try scrolling-zoom: closer objects get more lines crossing them, just like a CRT.</p>
+    <p class="hint">Press any key to hide.</p>
+  </aside>
+  <script src="scanline-shader.js"></script>
+</body>
+</html>

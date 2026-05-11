@@ -1,120 +1,260 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>p5.strands shader sketches</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      align-items: flex-start;
-      padding: 40px 20px;
-      font-family: system-ui, sans-serif;
-    }
-    main {
-      max-width: 600px;
-      width: 100%;
-    }
-    h1 {
-      margin-top: 0;
-      font-size: 22px;
-    }
-    h2 {
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: #888;
-      margin: 24px 0 8px;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    li { margin: 6px 0; }
-    a.sketch-link {
-      display: block;
-      padding: 10px 14px;
-      background: white;
-      border-radius: 6px;
-      text-decoration: none;
-      color: #333;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-    }
-    a.sketch-link:hover { background: #fafafa; }
-    .label { font-weight: 500; }
-    .desc { font-size: 13px; color: #666; margin-top: 2px; }
-  </style>
-</head>
-<body>
-  <main>
-    <h1>p5.strands shader sketches</h1>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>p5.strands shader sketches</title>
+        <link rel="stylesheet" href="style.css" />
+        <style>
+            body {
+                align-items: flex-start;
+                padding: 40px 20px;
+                font-family: system-ui, sans-serif;
+                overflow: auto;
+            }
+            main {
+                max-width: 600px;
+                width: 100%;
+            }
+            h1 {
+                margin-top: 0;
+                font-size: 22px;
+            }
+            h2 {
+                font-size: 14px;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                color: #888;
+                margin: 24px 0 8px;
+            }
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+            li {
+                margin: 6px 0;
+            }
+            a.sketch-link {
+                display: block;
+                padding: 10px 14px;
+                background: white;
+                border-radius: 6px;
+                text-decoration: none;
+                color: #333;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            }
+            a.sketch-link:hover {
+                background: #fafafa;
+            }
+            .label {
+                font-weight: 500;
+            }
+            .desc {
+                font-size: 13px;
+                color: #666;
+                margin-top: 2px;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <h1>p5.strands shader sketches</h1>
 
-    <h2>Outline shaders</h2>
-    <ul>
-      <li>
-        <a class="sketch-link" href="outline-shader1.html">
-          <span class="label">Outline shader 1</span>
-          <div class="desc">Minimal inverted-hull outline (uniform scale + back-face cull).</div>
-        </a>
-      </li>
-      <li>
-        <a class="sketch-link" href="outline-shader2.html">
-          <span class="label">Outline shader 2</span>
-          <div class="desc">Constant pixel-width outline (depth-scaled normal push). Smooth-normal meshes only.</div>
-        </a>
-      </li>
-      <li>
-        <a class="sketch-link" href="outline-shader1-applied.html">
-          <span class="label">Outline shader 1 — applied</span>
-          <div class="desc">Drifting building composites of stacked cubes; inverted-hull outline applied per part, with per-part palette colours.</div>
-        </a>
-      </li>
-    </ul>
+            <h2>Outline shaders</h2>
+            <ul>
+                <li>
+                    <a class="sketch-link" href="outline-shader1.html">
+                        <span class="label">Outline shader 1</span>
+                        <div class="desc">
+                            Minimal inverted-hull outline (uniform scale +
+                            back-face cull).
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="sketch-link" href="outline-shader2.html">
+                        <span class="label">Outline shader 2</span>
+                        <div class="desc">
+                            Constant pixel-width outline (depth-scaled normal
+                            push). Smooth-normal meshes only.
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="sketch-link" href="outline-shader1-applied.html">
+                        <span class="label">Outline shader 1 — applied</span>
+                        <div class="desc">
+                            Drifting building composites of stacked cubes;
+                            inverted-hull outline applied per part, with
+                            per-part palette colours.
+                        </div>
+                    </a>
+                </li>
+            </ul>
 
-    <h2>Toon shaders</h2>
-    <ul>
-      <li>
-        <a class="sketch-link" href="toon-shader.html">
-          <span class="label">Toon shader 1</span>
-          <div class="desc">3-band quantized diffuse using <code>fill()</code> only.</div>
-        </a>
-      </li>
-      <li>
-        <a class="sketch-link" href="toon-shader2.html">
-          <span class="label">Toon shader 2</span>
-          <div class="desc">3-band with separate shadow colour from <code>ambientMaterial()</code>.</div>
-        </a>
-      </li>
-      <li>
-        <a class="sketch-link" href="toon-shader3.html">
-          <span class="label">Toon shader 3</span>
-          <div class="desc">4-band — adds a highlight from <code>specularMaterial()</code>.</div>
-        </a>
-      </li>
-      <li>
-        <a class="sketch-link" href="toon-shader4.html">
-          <span class="label">Toon shader 4</span>
-          <div class="desc">4-band with per-object highlight size driven by <code>shininess()</code>.</div>
-        </a>
-      </li>
-    </ul>
+            <h2>Toon shaders</h2>
+            <ul>
+                <li>
+                    <a class="sketch-link" href="toon-shader.html">
+                        <span class="label">Toon shader 1</span>
+                        <div class="desc">
+                            3-band quantized diffuse using
+                            <code>fill()</code> only.
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="sketch-link" href="toon-shader2.html">
+                        <span class="label">Toon shader 2</span>
+                        <div class="desc">
+                            3-band with separate shadow colour from
+                            <code>ambientMaterial()</code>.
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="sketch-link" href="toon-shader3.html">
+                        <span class="label">Toon shader 3</span>
+                        <div class="desc">
+                            4-band — adds a highlight from
+                            <code>specularMaterial()</code>.
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="sketch-link" href="toon-shader4.html">
+                        <span class="label">Toon shader 4</span>
+                        <div class="desc">
+                            4-band with per-object highlight size driven by
+                            <code>shininess()</code>.
+                        </div>
+                    </a>
+                </li>
+            </ul>
 
-    <h2>Vertex displacement</h2>
-    <ul>
-      <li>
-        <a class="sketch-link" href="twist-shader.html">
-          <span class="label">Twist shader</span>
-          <div class="desc">Rotates <code>position.xz</code> around the y axis by an angle proportional to y, oscillating over time. Spiral barber-pole effect on multi-ring primitives.</div>
-        </a>
-      </li>
-      <li>
-        <a class="sketch-link" href="jelly-shader.html">
-          <span class="label">Jelly shader</span>
-          <div class="desc">Noise-based vertex displacement — organic wobble using strands's built-in <code>noise()</code>.</div>
-        </a>
-      </li>
-    </ul>
-  </main>
-</body>
+            <h2>Lighting variants</h2>
+            <ul>
+                <li>
+                    <a class="sketch-link" href="half-lambert-shader.html">
+                        <span class="label">Half-Lambert</span>
+                        <div class="desc">
+                            Softer diffuse:
+                            <code>pow(N·L * 0.5 + 0.5, 2)</code>. Back-facing
+                            surfaces still get some light.
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="sketch-link" href="fresnel-shader.html">
+                        <span class="label">Fresnel (rim light)</span>
+                        <div class="desc">
+                            Bright glow at silhouettes via
+                            <code>pow(1 - n.z, 3)</code>. Stylized rim
+                            highlight, no light setup needed.
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="sketch-link" href="hemisphere-shader.html">
+                        <span class="label">Hemisphere lighting</span>
+                        <div class="desc">
+                            Cheap "sky from above, ground from below" lighting —
+                            one-line mix based on normal.y.
+                        </div>
+                    </a>
+                </li>
+            </ul>
+
+            <h2>Surface filters</h2>
+            <ul>
+                <li>
+                    <a class="sketch-link" href="normal-viewer-shader.html">
+                        <span class="label">Normal viewer</span>
+                        <div class="desc">
+                            Diagnostic — maps the surface normal directly to
+                            RGB. Useful sanity check before designing other
+                            normal-based shaders.
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="sketch-link" href="noise-wash-shader.html">
+                        <span class="label">Noise wash</span>
+                        <div class="desc">
+                            Per-surface marbling — layers two
+                            <code>noise()</code> frequencies on the texCoord to
+                            tint each shape.
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="sketch-link" href="scanline-shader.html">
+                        <span class="label">Scanline (CRT)</span>
+                        <div class="desc">
+                            Old TV / arcade look — horizontal scan lines via
+                            fract on view-space y, green phosphor tint.
+                        </div>
+                    </a>
+                </li>
+            </ul>
+
+            <h2>Vertex displacement</h2>
+            <ul>
+                <li>
+                    <a class="sketch-link" href="wave-shader.html">
+                        <span class="label">Wave</span>
+                        <div class="desc">
+                            Classic <code>sin(t + x * freq)</code> vertical
+                            wobble in world space — wave travels along the x
+                            axis across a row of spheres.
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="sketch-link" href="breathe-shader.html">
+                        <span class="label">Breathe</span>
+                        <div class="desc">
+                            Push along world-space normal by
+                            <code>sin(t)</code> — inflate-and-deflate cycle.
+                            Smooth-normal meshes only.
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="sketch-link" href="twist-shader.html">
+                        <span class="label">Twist</span>
+                        <div class="desc">
+                            Rotates <code>position.xz</code> around the y axis
+                            by an angle proportional to y, oscillating over
+                            time. Spiral barber-pole effect on multi-ring
+                            primitives.
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a class="sketch-link" href="jelly-shader.html">
+                        <span class="label">Jelly</span>
+                        <div class="desc">
+                            Noise-based vertex displacement — organic wobble
+                            using strands's built-in <code>noise()</code>.
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <h2>Notes</h2>
+
+            <ul>
+                <li>
+                    <a class="sketch-link" href="strands-gotchas.html">
+                        <span class="label">strands gotchas</span>
+                        <div class="desc">
+                            workarounds for the strands codegen / API issues we
+                            hit while building these sketches.
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </main>
+    </body>
 </html>

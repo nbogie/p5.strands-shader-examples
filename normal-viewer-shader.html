@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>normal viewer - p5.strands</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #explanation { position: fixed; top: 20px; left: 20px; max-width: 360px; background: rgba(255,255,255,0.94); padding: 14px 18px; border-radius: 8px; font-family: system-ui, sans-serif; font-size: 13px; line-height: 1.5; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    #explanation h2 { margin: 0 0 8px; font-size: 15px; }
+    #explanation p { margin: 0 0 8px; }
+    #explanation .hint { margin: 0; font-size: 11px; color: #666; }
+    #explanation code { background: #eee; padding: 1px 4px; border-radius: 3px; font-size: 12px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
+</head>
+<body>
+  <a href="index.html" class="back-to-index">← back to index</a>
+  <aside id="explanation">
+    <h2>Normal viewer</h2>
+    <p>Diagnostic shader: maps each pixel's surface normal directly to RGB. Each component goes from [-1,1] → [0,1] via <code>n * 0.5 + 0.5</code>.</p>
+    <p>The sphere shows a smooth gradient (every normal direction visible). The box shows 6 solid colours — one per face — because its normals are constant across each face.</p>
+    <p>Useful as a debugging tool: if the normal-viewer looks wrong on a mesh, all normal-based shaders (lighting, fresnel, breathe) will too.</p>
+    <p class="hint">Press any key to hide.</p>
+  </aside>
+  <script src="normal-viewer-shader.js"></script>
+</body>
+</html>
