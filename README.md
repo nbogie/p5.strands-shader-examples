@@ -1,10 +1,6 @@
 # p5.strands-outline-shader
 
-Experiments with outline-shader techniques on 3D geometry using p5.js v2 and `p5.strands`.
-
-- `sketch.js` — main sketch (drifting buildings, nebula skybox, per-part palette colours, inverted-hull outline)
-- `minimal-demo.html` / `minimal-demo.js` — minimum viable inverted-hull outline (uniform `scale()` inflation)
-- `variant-demo.html` / `variant-demo.js` — constant-pixel-width variant that pushes vertices in view space, scaled by depth
+Experiments with shaders using p5.strands, mostly written with claude code.
 
 ## Claude
 
