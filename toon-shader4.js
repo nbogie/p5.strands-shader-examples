@@ -39,11 +39,12 @@ function drawRotatingShapes() {
   ambientMaterial(palette.shadowColor);
   specularMaterial(palette.highlight);
 
-  // High shininess = tiny pinprick highlight.
+  // Sphere shininess driven by mouseY: 1 (broad highlight) on the left
+  // edge to 150 (pinprick) on the right edge.
   push();
   translate(-220, 0, 0);
   rotateY(frameCount * 0.01);
-  shininess(80);
+  shininess(map(mouseY, 0, height, 1, 150, true));
   fill(palette.red);
   sphere(110, 48, 32);
   pop();

@@ -32,7 +32,7 @@
     <h2>Toon shader 4 — shininess-driven highlight</h2>
     <p>Same 4 bands as toon shader 3, but the highlight band's size is per-object. Set via <code>shininess()</code> alongside the material colours.</p>
     <p>Inside the shader: <code>step(0.5, pow(N·L, shininess))</code>. For <code>x &lt; 1</code>, <code>pow(x, n)</code> shrinks toward zero as <code>n</code> grows — so high shininess gives a pinprick, low shininess gives a broad patch.</p>
-    <p>The three shapes use <code>shininess(80 / 15 / 3)</code> so the difference is visible in one frame.</p>
+    <p>The sphere's shininess is driven by <code>mouseY</code> (1 on the left, 150 on the right) so you can watch the highlight shrink in real time. The other two shapes use fixed <code>shininess(15 / 3)</code> for comparison.</p>
     <p class="hint">Press any key to hide.</p>
   </aside>
   <script src="toon-shader4.js"></script>
