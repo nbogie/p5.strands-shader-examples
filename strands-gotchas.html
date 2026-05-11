@@ -27,6 +27,8 @@
     <h1>p5.strands gotchas</h1>
     <p>Things that bit us while building the sketches in this project. Not exhaustive — just the ones with a clear symptom and a clear workaround.</p>
 
+    <p>warning: unvetted as yet by human.  may be a waste of time to read these, for now. These are just being collected here as we go.</p>
+
     <h2>1. <code>finalColor.set(node)</code> emits a hook with no return</h2>
     <p><span class="label symptom">Symptom</span> Shader fails to compile with <code>ERROR: 'HOOK_getFinalColor' : Function does not return a value</code>.</p>
     <p>Passing a single strand node (e.g. a <code>uniformVec4</code>) directly to <code>finalColor.set</code> emits a hook body that mentions the value but never <code>return</code>s it.</p>
