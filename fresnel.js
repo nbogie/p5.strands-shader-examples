@@ -58,10 +58,10 @@ function prepShader() {
 
   finalColor.begin();
   finalColor.set([
-    baseColor.x + rim,
-    baseColor.y + rim,
-    baseColor.z + rim,
-    baseColor.w,
+    baseColor.r + rim,
+    baseColor.g + rim,
+    baseColor.b + rim,
+    baseColor.a,
   ]);
   finalColor.end();
 }

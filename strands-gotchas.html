@@ -29,6 +29,8 @@
 
     <p>warning: unvetted as yet by human.  may be a waste of time to read these, for now. These are just being collected here as we go.</p>
 
+    <p><strong>What these gotchas don't say:</strong> vec3 / vec4 arithmetic in strands works fine in general. <code>vec * scalar</code>, <code>vec + vec</code>, swizzles like <code>.rgb</code>, mixing components into an array — these are all well-supported. Each item below is a specific, narrow case; none of them is a reason to refuse vec ops and break everything into per-channel code. (Some sketches in this project did that prematurely; the consolidation in commit <code>63738f0</code> shows the cleaner form.)</p>
+
     <h2>1. <code>finalColor.set(node)</code> emits a hook with no return</h2>
     <p><span class="label symptom">Symptom</span> Shader fails to compile with <code>ERROR: 'HOOK_getFinalColor' : Function does not return a value</code>.</p>
     <p>Passing a single strand node (e.g. a <code>uniformVec4</code>) directly to <code>finalColor.set</code> emits a hook body that mentions the value but never <code>return</code>s it.</p>

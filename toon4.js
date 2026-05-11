@@ -105,6 +105,6 @@ function prepToonShader() {
   const d =  shadowColor * invD + baseColor.rgb * factorDiff;
   const invS = 1 - factorSpec;
   const c = d * invS + specColor.rgb * factorSpec;
-  finalColor.set([c.x, c.y, c.z, baseColor.w ]);
+  finalColor.set([c.r, c.g, c.b, baseColor.a]);
   finalColor.end();
 }

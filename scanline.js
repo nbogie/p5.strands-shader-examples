@@ -68,10 +68,10 @@ function prepShader() {
   const scan = 0.55 + 0.45 * line;               // dark rows at 0.55, light at 1.0
   // Slight green phosphor tint + desaturation toward green.
   finalColor.set([
-    baseColor.x * lit * scan * 0.85,
-    baseColor.y * lit * scan * 1.0,
-    baseColor.z * lit * scan * 0.85,
-    baseColor.w,
+    baseColor.r * lit * scan * 0.85,
+    baseColor.g * lit * scan * 1.0,
+    baseColor.b * lit * scan * 0.85,
+    baseColor.a,
   ]);
   finalColor.end();
 }

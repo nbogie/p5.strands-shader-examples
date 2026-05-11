@@ -86,6 +86,6 @@ function prepToonShader() {
   // returns it from the hook (passing a single node directly to .set()
   // misses the return — known strands codegen quirk).
   let c = baseColor.rgb * intensity;
-  finalColor.set([c.x, c.y, c.z, baseColor.w ]);
+  finalColor.set([c.r, c.g, c.b, baseColor.a]);
   finalColor.end();
 }

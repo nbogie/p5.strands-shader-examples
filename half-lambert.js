@@ -59,11 +59,7 @@ function prepShader() {
   pixelInputs.end();
 
   finalColor.begin();
-  finalColor.set([
-    baseColor.x * intensity,
-    baseColor.y * intensity,
-    baseColor.z * intensity,
-    baseColor.w,
-  ]);
+  const c = baseColor.rgb * intensity;
+  finalColor.set([c.r, c.g, c.b, baseColor.a]);
   finalColor.end();
 }
