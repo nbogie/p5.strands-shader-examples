@@ -48,7 +48,8 @@ function keyPressed() {
 function prepShader() {
   let baseColor = sharedVec4();
   let viewY = sharedFloat();
-  let lit = sharedFloat();
+  // diffuseIntensity is Lambertian shading 0..1 from a camera-relative light.
+  let diffuseIntensity = sharedFloat();
 
   cameraInputs.begin();
   // View-space y is roughly screen-aligned for nearly-horizontal viewing,
@@ -58,20 +59,18 @@ function prepShader() {
 
   pixelInputs.begin();
   baseColor = pixelInputs.color;
-  // Quick Lambertian lighting from a camera-relative direction.
   const n = normalize(pixelInputs.normal);
-  lit = max(n.x * 0.4 + n.y * -0.5 + n.z * 0.77, 0) * 0.7 + 0.3;
+  diffuseIntensity = max(n.x * 0.4 + n.y * -0.5 + n.z * 0.77, 0) * 0.7 + 0.3;
   pixelInputs.end();
 
   finalColor.begin();
-  const line = step(0.5, fract(viewY * 0.5));   // alternating on/off rows
-  const scan = 0.55 + 0.45 * line;               // dark rows at 0.55, light at 1.0
-  // Slight green phosphor tint + desaturation toward green.
-  finalColor.set([
-    baseColor.r * lit * scan * 0.85,
-    baseColor.g * lit * scan * 1.0,
-    baseColor.b * lit * scan * 0.85,
-    baseColor.a,
-  ]);
+  // rowMask is 0 on dark scanline rows, 1 on light rows.
+  const rowMask = step(0.5, fract(viewY * 0.5));
+  // scanlineTint is the brightness multiplier from scanlines: 0.55 dark, 1.0 light.
+  const scanlineTint = 0.55 + 0.45 * rowMask;
+  // phosphor desaturates the result toward green — classic CRT look.
+  const phosphor = vec3(0.85, 1.0, 0.85);
+  const c = baseColor.rgb * diffuseIntensity * scanlineTint * phosphor;
+  finalColor.set([c.r, c.g, c.b, baseColor.a]);
   finalColor.end();
 }

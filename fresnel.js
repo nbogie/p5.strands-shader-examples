@@ -47,21 +47,19 @@ function keyPressed() {
 
 function prepShader() {
   let baseColor = sharedVec4();
-  let rim = sharedFloat();
+  // rimIntensity is ~0 on camera-facing surfaces, ~1 at the silhouette.
+  let rimIntensity = sharedFloat();
 
   pixelInputs.begin();
   baseColor = pixelInputs.color;
   const n = normalize(pixelInputs.normal);
   // n.z near 1 = facing camera, near 0 = silhouette. Invert + power for crisp rim.
-  rim = pow(max(1 - n.z, 0), 3);
+  rimIntensity = pow(max(1 - n.z, 0), 3);
   pixelInputs.end();
 
   finalColor.begin();
-  finalColor.set([
-    baseColor.r + rim,
-    baseColor.g + rim,
-    baseColor.b + rim,
-    baseColor.a,
-  ]);
+  // vec3 + scalar broadcasts: brightens every channel of the base by rimIntensity.
+  const c = baseColor.rgb + rimIntensity;
+  finalColor.set([c.r, c.g, c.b, baseColor.a]);
   finalColor.end();
 }

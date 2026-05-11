@@ -40,24 +40,21 @@ function keyPressed() {
 }
 
 function prepShader() {
-  let factor = sharedFloat();
+  // skyAmount is 0 on surfaces facing the ground and 1 on surfaces
+  // facing the sky — used as the mix weight between ground and sky.
+  let skyAmount = sharedFloat();
 
   pixelInputs.begin();
   const n = normalize(pixelInputs.normal);
   // p5 view space: +y is down. -n.y therefore means "facing up".
-  // Map from [-1, 1] to [0, 1] for use as a mix factor (0 = ground, 1 = sky).
-  factor = (0 - n.y) * 0.5 + 0.5;
+  // Map from [-1, 1] to [0, 1].
+  skyAmount = (0 - n.y) * 0.5 + 0.5;
   pixelInputs.end();
 
   finalColor.begin();
-  // Order matters: strand node first, scalar second. The transpiler
-  // rewrites `node * x` as node.mult(x); the reverse fails on numbers.
-  const inv = 1 - factor;
-  finalColor.set([
-    inv * GROUND[0] + factor * SKY[0],
-    inv * GROUND[1] + factor * SKY[1],
-    inv * GROUND[2] + factor * SKY[2],
-    1,
-  ]);
+  const ground = vec3(GROUND[0], GROUND[1], GROUND[2]);
+  const sky = vec3(SKY[0], SKY[1], SKY[2]);
+  const c = mix(ground, sky, skyAmount);
+  finalColor.set([c.r, c.g, c.b, 1]);
   finalColor.end();
 }
