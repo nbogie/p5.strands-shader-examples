@@ -29,10 +29,10 @@ function draw() {
   // Ground plane / horizon — laid flat far below the shapes.
   push();
   rotateX(PI / 2);
-  translate(0, 0, 220);
+  translate(0, 0, -160);
   ambientMaterial(palette.shadowSand);
   fill(palette.sand);
-  plane(4000, 2400);
+  circle( 0, 0, 40000);
   pop();
 
   ambientMaterial(palette.shadowWarm);
