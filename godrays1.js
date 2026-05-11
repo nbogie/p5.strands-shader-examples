@@ -15,6 +15,7 @@ function setup() {
 function draw() {
   background(palette.sky);
 
+  orbitControl()
   // Sun: a bright disc drawn first, far back.
   push();
   translate(0, -180, -400);
@@ -81,7 +82,7 @@ function prepGodraysFilter() {
   // Sun position in UV space, matched to where the bright source is drawn.
   const lightUV = vec2(0.5, 0.22);
 
-  const samples = 32;
+  const samples = 160;
   const density = 0.9;
   const decay = 0.96;
   const weight = 0.45;
