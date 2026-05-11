@@ -59,6 +59,7 @@ function drawPlanet({ radius, seaColor, landColor, cloudColor, nSeed }) {
 
   sphere(radius, 48, 64);
   shader(cloudShader);
+  cloudShader.setUniform("nSeed", nSeed)
   sphere(radius * 1.05, 48, 64);
   pop();
 }
@@ -68,7 +69,7 @@ function prepPlanetShader() {
   let seaColor = sharedVec3();
   let factor = sharedFloat();
   let nSeed = uniformFloat("nSeed")
-  let highLandColor = [0.9, 0.9, 0.9];
+  let highLandColor = [1, 1, 1];
 
   let objPos = sharedVec3();
   objectInputs.begin();
@@ -102,6 +103,7 @@ function prepPlanetShader() {
 function prepCloudShader() {
   let baseColor = sharedVec4();
   let shadowColor = sharedVec3();
+  let nSeed = uniformFloat("nSeed")
   let factor = sharedFloat();
 
   //question: do we want to change the cloud heights to fit to our ridiculous terrain heights?
@@ -112,7 +114,7 @@ function prepCloudShader() {
   objPos = objectInputs.position;
   let ampTerra = 0.2;
   let noiseScaleTerra = 0.9;
-  let noiseValTerra = noise(objPos * noiseScaleTerra);
+  let noiseValTerra = noise(nSeed + objPos * noiseScaleTerra);
   let landHeight = ampTerra * (noiseValTerra - 0.5);
   landHeight = max(landHeight, 0);
   objectInputs.normal;
@@ -121,7 +123,7 @@ function prepCloudShader() {
   let amp = 3;
   noiseDetail(5);
   let noiseScale = 1.2;
-  let nVal = amp * (noise(objPos * noiseScale) - 0.5);
+  let nVal = amp * (noise(nSeed + objPos * noiseScale) - 0.5);
   objectInputs.end();
 
   finalColor.begin();
