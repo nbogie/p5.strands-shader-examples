@@ -16,7 +16,8 @@ function draw() {
   background(palette.bg);
   orbitControl();
   ambientLight(40);
-  directionalLight(230, 230, 230, 0.5, 0.5, -0.5);
+  directionalLight(230, 230, 230, 0.5, 0.1, -0.5);
+  directionalLight(color("skyblue"), createVector(0, 1, 0));
   shader(myShader);
 
   push();
@@ -31,7 +32,7 @@ function draw() {
   rotateY(frameCount * 0.013);
   rotateX(frameCount * 0.008);
   fill(palette.green);
-  torus(80, 32);
+  torus(80, 32, 40, 40);
   pop();
 
   push();
@@ -56,8 +57,8 @@ function prepShader() {
   objectInputs.end();
 
   pixelInputs.begin();
-  const f = 20;   // frequency — higher = finer bumps
-  const a = 0.4;  // amplitude — higher = rougher surface
+  const f = 8;   // frequency — higher = finer bumps
+  const a = 0.2;  // amplitude — higher = rougher surface
   // Three independent noise samples for the three normal-component shifts.
   const dx = noise(pos.x * f + 7, pos.y * f, pos.z * f) - 0.5;
   const dy = noise(pos.x * f, pos.y * f + 13, pos.z * f) - 0.5;
