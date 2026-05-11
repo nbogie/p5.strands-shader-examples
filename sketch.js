@@ -1,5 +1,4 @@
 let outlineShader;
-let nebulaShader;
 let buildings;
 
   // "name": "tsu_arcade",
@@ -26,8 +25,6 @@ function setup() {
     noStroke();
 
     outlineShader = buildMaterialShader(outline);
-    nebulaShader = buildMaterialShader(nebula);
-    console.log(nebulaShader.fragSrc())
 
     buildings = createBuildings();
 }
@@ -37,25 +34,12 @@ function draw() {
     rotateX(-PI / 8);
     orbitControl();
 
-    drawNebula();
 
     lights();
     updateBuildings();
     drawBuildings();
 }
 
-function drawNebula() {
-    const gl = drawingContext;
-    push();
-    shader(nebulaShader);
-    // Same y-flip trick as the outline pass: cull BACK to keep only the
-    // inside-facing triangles, so we see the inner wall of the sphere.
-    gl.enable(gl.CULL_FACE);
-    gl.cullFace(gl.BACK);
-    sphere(3000, 48, 32);
-    gl.disable(gl.CULL_FACE);
-    pop();
-}
 
 function createBuildings() {
     let arr = [];
@@ -244,27 +228,5 @@ function outline() {
     // finalColor.set(oc);
 
 
-    finalColor.end();
-}
-
-function nebula() {
-    // pixelInputs is the only block where texCoord is reliably accessible
-    // in the JS API; stash it for use inside finalColor.
-    let uv = sharedVec2();
-    pixelInputs.begin();
-    uv = pixelInputs.texCoord;
-    pixelInputs.end();
-
-    finalColor.begin();
-    // Two octaves of noise create wispy swirls; a high-freq layer is
-    // raised to a power so only its bright peaks survive — those become
-    // pinprick "stars".
-    const swirl = noise(uv.x * 5, uv.y * 5);
-    const wisp = noise(uv.x * 14 + 50, uv.y * 14);
-    const stars = pow(noise(uv.x * 180, uv.y * 180), 12) * 8;
-    const r = swirl * 0.35 + wisp * 0.1 + stars;
-    const g = swirl * 0.15 + wisp * 0.05 + stars;
-    const b = swirl * 0.55 + wisp * 0.25 + stars + 0.06;
-    finalColor.set([r, g, b, 1]);
     finalColor.end();
 }

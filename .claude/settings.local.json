@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node dump.mjs variant-demo.html)",
+      "Bash(node dump.mjs variant-demo.html 2000)",
+      "Bash(node dump.mjs toon-shader.html 2000)"
+    ]
+  }
+}
