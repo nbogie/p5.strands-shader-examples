@@ -1,20 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node dump.mjs variant-demo.html)",
-      "Bash(node dump.mjs variant-demo.html 2000)",
-      "Bash(node dump.mjs toon-shader.html 2000)",
-      "Bash(node dump.mjs toon-shader3.html 2000)",
-      "Bash(node dump.mjs toon-shader4.html 2000)",
-      "Bash(node dump.mjs toon-shader3.html 1500)",
-      "Bash(node dump.mjs outline-shader1-applied.html 2500)",
-      "Bash(node dump.mjs twist-shader.html 2000)",
-      "Bash(node dump.mjs hemisphere-shader.html 1500)",
-      "Bash(node dump.mjs noise-wash-shader.html 1500)",
-      "Bash(node dump.mjs strands-gotchas.html 1000)",
-      "Bash(node dump.mjs toon3.html 1500)",
-      "Bash(node dump.mjs outline1-applied.html 2500)",
-      "Bash(node dump.mjs noise-wash.html 1500)"
+      "Bash(node dump.mjs *)"
     ]
   }
 }
