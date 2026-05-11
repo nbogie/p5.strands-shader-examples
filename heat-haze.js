@@ -71,12 +71,20 @@ function draw() {
 
 function keyPressed() {
   if (key == "t") {
-    config.useToonShader = !config.useToonShader;
+    toggleToonShader();
     return;
   }
 
   const panel = document.getElementById("explanation");
   if (panel) panel.style.display = panel.style.display === "none" ? "" : "none";
+}
+
+function doubleClicked(){
+  toggleToonShader();
+}
+
+function toggleToonShader(){
+  config.useToonShader = !config.useToonShader;
 }
 
 // Toon shader — duplicated from toon2.js so this sketch is self-contained
