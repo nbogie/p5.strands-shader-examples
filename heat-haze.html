@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>heat haze - p5.strands</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #explanation { position: fixed; top: 20px; left: 20px; max-width: 360px; background: rgba(255,255,255,0.94); padding: 14px 18px; border-radius: 8px; font-family: system-ui, sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    #explanation code { background: #eee; padding: 1px 4px; border-radius: 3px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
+</head>
+<body>
+  <a href="index.html" class="back-to-index">← back to index</a>
+  <aside id="explanation">
+    <h2>Heat haze (post-process filter)</h2>
+    <p>A filter shader — applied after geometry rendering via <code>filter(hazeShader)</code>. Each pixel of the output is sampled from the rendered canvas at a slightly <strong>displaced UV</strong>, with the displacement coming from a noise field that scrolls upward over time.</p>
+    <p>The displacement is stronger near the bottom (<code>pow(uv.y, 1.5)</code>) — that's where the hot sand would be — and tapers to nothing near the top. Result: silhouettes wobble as if seen through rising hot air.</p>
+    <p>Filter shaders use <code>filterColor.canvasContent</code> (the rendered scene as a texture) and <code>filterColor.texCoord</code> (the screen UV), and produce a new colour with <code>filterColor.set</code>.</p>
+  </aside>
+  <script src="heat-haze.js"></script>
+</body>
+</html>
