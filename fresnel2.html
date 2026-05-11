@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>fresnel 2 - mouse-controlled - p5.strands</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #explanation { position: fixed; top: 20px; left: 20px; max-width: 360px; background: rgba(255,255,255,0.94); padding: 14px 18px; border-radius: 8px; font-family: system-ui, sans-serif; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    #explanation code { background: #eee; padding: 1px 4px; border-radius: 3px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
+</head>
+<body>
+  <a href="index.html" class="back-to-index">← back to index</a>
+  <aside id="explanation" onclick="toggleExplanation()" style="display: none">
+    <h2>Fresnel 2 — mouse-controlled</h2>
+    <p>Same rim-light idea as <em>Fresnel</em>, but with two of the three toruses driven by mouse position.</p>
+    <p><strong>Top:</strong> <code>mouseX</code> controls the rim power (crispness). Drag left for a broad halo, right for a pinprick.</p>
+    <p><strong>Middle:</strong> defaults (<code>power = 3</code>, full intensity) — reference.</p>
+    <p><strong>Bottom:</strong> <code>mouseY</code> controls the rim intensity multiplier. Top of canvas = dark base, bottom = bright glow.</p>
+    <p>Strands exposes <code>mouseX</code>, <code>mouseY</code>, <code>pmouseX</code>, <code>pmouseY</code> as automatic float uniforms — no <code>uniformFloat</code> declaration needed, just reference them inside your shader.</p>
+  </aside>
+  <script src="fresnel2.js"></script>
+  <button class="toggle-btn" onclick="toggleExplanation()">toggle explanation</button>
+  <script>function toggleExplanation(){var p=document.getElementById("explanation");p.style.display=p.style.display==="none"?"":"none"}</script>
+</body>
+</html>
