@@ -14,40 +14,34 @@ function draw() {
     drawGround();
     orbitControl();
 
-    push()
+    push();
     shader(twistShader);
-    
-    push();
-    translate(-150, 0, 200);
-    fill("lime");
-    sphere(75);
-    pop();
 
+    // High detailY is what makes the spiral readable — without
+    // intermediate rings of vertices the shape just shears between top
+    // and bottom instead of spiraling.
+
+    // Hex prism — flat sides spiral up the y axis like a barber pole.
     push();
-    translate(50, 0, 0);
-    translate(0, 100 * sin(frameCount / 100), 0);
+    translate(-250, -50, 0);
     fill("magenta");
-    sphere(75);
+    cylinder(70, 320, 6, 24);
     pop();
 
+    // 4-sided pyramid — square cross-section gives clear corner spirals.
     push();
-    translate(300, -100, -300);
-    rotateY(-frameCount / 45);
+    translate(0, -50, 0);
     fill("yellow");
-    torus(75, 30);
+    cone(90, 320, 5, 24);
     pop();
 
+    // 3-sided pyramid — different cross-section, same spiral effect.
     push();
-    translate(200, 100, 0);
-    push();
-    fill("cyan");
-    rotateY(frameCount / 100);
-    cylinder(75, 102, 24, 16);
+    translate(250, -50, 0);
+    fill("lime");
+    box(100, 100, 100, 5, 5)
     pop();
-    fill("dodgerblue");
-    translate(-400, 0, -500);
-    box(200);
-    pop();
+
     pop();
 }
 
@@ -55,9 +49,16 @@ function prepTwistShader() {
     objectInputs.begin();
     // Rotate position.xz around the y axis by an angle proportional to y.
     // Capture x and z first so we don't read a partially-rewritten position.
+    //
+    // Note: p5's built-in primitives have unit-sized object-space coords
+    // (y ∈ [-0.5, 0.5]) — the dimensions you pass to box()/cylinder()/etc.
+    // are applied later via the model matrix. So the twist factor here is
+    // in radians per unit-y, not per pixel-y; ~5 gives a dramatic spiral.
+    const speed = 2;
+    const t = speed * millis() / 1000;
     const x = objectInputs.position.x;
     const z = objectInputs.position.z;
-    const angle = objectInputs.position.y * 0.02;
+    const angle = sin(t) * objectInputs.position.y * 5;
     const c = cos(angle);
     const s = sin(angle);
     objectInputs.position.x = x * c - z * s;
