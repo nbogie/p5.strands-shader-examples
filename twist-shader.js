@@ -53,23 +53,16 @@ function draw() {
 
 function prepTwistShader() {
     objectInputs.begin();
-    const amp = 0.4;
-    const noiseScale = 0.1;
-    const speed = 0.15;
-
-    const t = (speed * millis()) / 1000;
-    objectInputs.position.x +=
-        amp * centredNoise(objectInputs.position * noiseScale + t + 271);
-    objectInputs.position.y +=
-        amp * centredNoise(objectInputs.position * noiseScale + t + 1000);
-    objectInputs.position.z +=
-        amp * centredNoise(objectInputs.position * noiseScale + t + 777);
-
+    // Rotate position.xz around the y axis by an angle proportional to y.
+    // Capture x and z first so we don't read a partially-rewritten position.
+    const x = objectInputs.position.x;
+    const z = objectInputs.position.z;
+    const angle = objectInputs.position.y * 0.02;
+    const c = cos(angle);
+    const s = sin(angle);
+    objectInputs.position.x = x * c - z * s;
+    objectInputs.position.z = x * s + z * c;
     objectInputs.end();
-
-    function centredNoise(v) {
-        return noise(v) - 0.5;
-    }
 }
 
 function drawGround() {
