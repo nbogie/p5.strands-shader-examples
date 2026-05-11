@@ -1,4 +1,4 @@
-let outlineShader;
+let jellyShader;
 let buildings;
 
   // "name": "tsu_arcade",
@@ -24,7 +24,7 @@ function setup() {
     createCanvas(700, 700, WEBGL);
     noStroke();
 
-    outlineShader = buildMaterialShader(outline);
+    jellyShader = buildMaterialShader(outline);
 
     buildings = createBuildings();
 }
@@ -186,8 +186,8 @@ function drawBuilding(b) {
     // Pass 1 — every cube in this building, drawn inflated, outline-only.
     // push/pop scopes the outline shader to this block.
     push();
-    shader(outlineShader);
-    outlineShader.setUniform("outlineColor", b.outlineColor);
+    shader(jellyShader);
+    jellyShader.setUniform("outlineColor", b.outlineColor);
     gl.cullFace(gl.BACK);
     for (const p of b.parts) {
         push();

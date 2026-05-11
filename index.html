@@ -3,11 +3,102 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>p5.js Sketch</title>
+  <title>p5.strands shader sketches</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/p5@2.2.3/lib/p5.js"></script>
+  <style>
+    body {
+      align-items: flex-start;
+      padding: 40px 20px;
+      font-family: system-ui, sans-serif;
+    }
+    main {
+      max-width: 600px;
+      width: 100%;
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 22px;
+    }
+    h2 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #888;
+      margin: 24px 0 8px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    li { margin: 6px 0; }
+    a.sketch-link {
+      display: block;
+      padding: 10px 14px;
+      background: white;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #333;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    }
+    a.sketch-link:hover { background: #fafafa; }
+    .label { font-weight: 500; }
+    .desc { font-size: 13px; color: #666; margin-top: 2px; }
+  </style>
 </head>
 <body>
-  <script src="sketch.js"></script>
+  <main>
+    <h1>p5.strands shader sketches</h1>
+
+    <h2>Outline shaders</h2>
+    <ul>
+      <li>
+        <a class="sketch-link" href="outline-shader1.html">
+          <span class="label">Outline shader 1</span>
+          <div class="desc">Minimal inverted-hull outline (uniform scale + back-face cull).</div>
+        </a>
+      </li>
+      <li>
+        <a class="sketch-link" href="outline-shader2.html">
+          <span class="label">Outline shader 2</span>
+          <div class="desc">Constant pixel-width outline (depth-scaled normal push). Smooth-normal meshes only.</div>
+        </a>
+      </li>
+      <li>
+        <a class="sketch-link" href="outline-shader1-applied.html">
+          <span class="label">Outline shader 1 — applied</span>
+          <div class="desc">Drifting buildings with nebula skybox; per-part palette colours and per-building outline tint.</div>
+        </a>
+      </li>
+    </ul>
+
+    <h2>Toon shaders</h2>
+    <ul>
+      <li>
+        <a class="sketch-link" href="toon-shader.html">
+          <span class="label">Toon shader 1</span>
+          <div class="desc">3-band quantized diffuse using <code>fill()</code> only.</div>
+        </a>
+      </li>
+      <li>
+        <a class="sketch-link" href="toon-shader2.html">
+          <span class="label">Toon shader 2</span>
+          <div class="desc">3-band with separate shadow colour from <code>ambientMaterial()</code>.</div>
+        </a>
+      </li>
+      <li>
+        <a class="sketch-link" href="toon-shader3.html">
+          <span class="label">Toon shader 3</span>
+          <div class="desc">4-band — adds a highlight from <code>specularMaterial()</code>.</div>
+        </a>
+      </li>
+      <li>
+        <a class="sketch-link" href="toon-shader4.html">
+          <span class="label">Toon shader 4</span>
+          <div class="desc">4-band with per-object highlight size driven by <code>shininess()</code>.</div>
+        </a>
+      </li>
+    </ul>
+  </main>
 </body>
 </html>

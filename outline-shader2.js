@@ -2,7 +2,7 @@ let outlineShader;
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
-    outlineShader = buildMaterialShader(prepOutlineShader);
+    jellyShader = buildMaterialShader(prepJellyShader);
 }
 
 function draw() {
@@ -40,7 +40,7 @@ function draw() {
     );
 }
 
-function prepOutlineShader() {
+function prepJellyShader() {
     cameraInputs.begin();
     // Component-wise writes — strands docs only show the per-component
     // pattern (worldInputs.position.y += ...), and the whole-vector form
@@ -80,7 +80,7 @@ function drawOutlinedShape(shapeFn, colour, pos) {
     //ONLY show back faces (p5 has this flipped (because +y is down?))
     gl.cullFace(gl.BACK);
     push();
-    shader(outlineShader);
+    shader(jellyShader);
     shapeFn();
     pop();
 

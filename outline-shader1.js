@@ -2,7 +2,7 @@ let outlineShader;
 
 function setup() {
   createCanvas(700, 700, WEBGL);
-  outlineShader = buildMaterialShader(outline);
+  jellyShader = buildMaterialShader(outline);
 }
 
 function draw() {
@@ -38,7 +38,7 @@ function drawOutlinedCube(pos) {
   //pass 1: inflated hull
   gl.cullFace(gl.BACK);
   push();
-  shader(outlineShader);
+  shader(jellyShader);
   scale(1.1);
   box(150);
   pop();
