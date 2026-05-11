@@ -1,4 +1,4 @@
-let outlineShader;
+let jellyShader;
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
