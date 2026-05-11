@@ -15,10 +15,12 @@
   <a href="index.html" class="back-to-index">← back to index</a>
   <aside id="explanation" onclick="toggleExplanation()" style="display: none">
     <h2>Fresnel 2 — mouse-controlled</h2>
-    <p>Same rim-light idea as <em>Fresnel</em>, but with two of the three toruses driven by mouse position.</p>
-    <p><strong>Top:</strong> <code>mouseX</code> controls the rim power (crispness). Drag left for a broad halo, right for a pinprick.</p>
-    <p><strong>Middle:</strong> defaults (<code>power = 3</code>, full intensity) — reference.</p>
-    <p><strong>Bottom:</strong> <code>mouseY</code> controls the rim intensity multiplier. Top of canvas = dark base, bottom = bright glow.</p>
+    <p>A Fresnel rim-light shader: surfaces are tinted brighter the more their normal is perpendicular to the view direction (i.e. at the silhouette). The basic formula is <code>pow(1 - n.z, power)</code>, where <code>n.z</code> in view space is ~1 when the surface faces the camera and ~0 at the silhouette — so <code>1 - n.z</code> picks out the rim, and the power sharpens it.</p>
+    <p>Two knobs are driven by mouse position on a single torus:</p>
+    <ul>
+      <li><strong><code>mouseX</code></strong> → <strong>power</strong> (rim sharpness). Move left for a broad halo, right for a tight pinprick. Range mapped to 1–11 across the canvas width.</li>
+      <li><strong><code>mouseY</code></strong> → <strong>intensity multiplier</strong> (rim brightness). Top of canvas = no glow, bottom = bright. Range 0–3.</li>
+    </ul>
     <p>Strands exposes <code>mouseX</code>, <code>mouseY</code>, <code>pmouseX</code>, <code>pmouseY</code> as automatic float uniforms — no <code>uniformFloat</code> declaration needed, just reference them inside your shader.</p>
   </aside>
   <script src="fresnel2.js"></script>
