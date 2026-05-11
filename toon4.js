@@ -102,15 +102,9 @@ function prepToonShader() {
 
   finalColor.begin();
   const invD = 1 - factorDiff;
-  const dr = shadowColor.x * invD + baseColor.x * factorDiff;
-  const dg = shadowColor.y * invD + baseColor.y * factorDiff;
-  const db = shadowColor.z * invD + baseColor.z * factorDiff;
+  const d =  shadowColor * invD + baseColor.rgb * factorDiff;
   const invS = 1 - factorSpec;
-  finalColor.set([
-    dr * invS + specColor.x * factorSpec,
-    dg * invS + specColor.y * factorSpec,
-    db * invS + specColor.z * factorSpec,
-    baseColor.w,
-  ]);
+  const c = d * invS + specColor.rgb * factorSpec;
+  finalColor.set([c.x, c.y, c.z, baseColor.w ]);
   finalColor.end();
 }

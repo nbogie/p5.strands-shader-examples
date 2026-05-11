@@ -85,11 +85,7 @@ function prepToonShader() {
   // Unpack into an array so strands emits a fresh vec4 constructor and
   // returns it from the hook (passing a single node directly to .set()
   // misses the return — known strands codegen quirk).
-  finalColor.set([
-    baseColor.x * intensity,
-    baseColor.y * intensity,
-    baseColor.z * intensity,
-    baseColor.w,
-  ]);
+  let c = baseColor.rgb * intensity;
+  finalColor.set([c.x, c.y, c.z, baseColor.w ]);
   finalColor.end();
 }
