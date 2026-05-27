@@ -1,3 +1,4 @@
 tools/dump-shaders/node_modules
 tools/dump-shaders/screenshot*.png
 .claude/settings.local.json
+.DS_Store
